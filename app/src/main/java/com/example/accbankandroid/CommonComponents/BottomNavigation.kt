@@ -1,8 +1,10 @@
 package com.example.accbankandroid.CommonComponents
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.CreditCard
@@ -18,60 +20,75 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.accbankandroid.ui.theme.loginlight
+import com.example.accbankandroid.R
+import androidx.compose.ui.res.painterResource
 
 @Composable
 fun BottomNavigation() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(70.dp)
-            .background(Color.Black), // ✅ Dark Background
-        contentAlignment = Alignment.Center
+            .height(90.dp) // Increased height for better FAB alignment
+            .clip(shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)) // ✅ Adds curve
+            .background(Color.Transparent), // Transparent for floating effect
+        contentAlignment = Alignment.BottomCenter
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+        // ✅ Bottom Bar with Rounded Corners
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(75.dp)
+                .clip(shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)) // ✅ Adds curve
+                .background(Color.Black), // ✅ Dark Background
+            contentAlignment = Alignment.Center
         ) {
-            val icons = listOf(
-                Icons.Filled.AccountBalance, // ✅ Bank Icon
-                Icons.Filled.CreditCard,     // ✅ Credit Card Icon
-                Icons.Filled.AttachMoney,    // ✅ Currency Icon
-                Icons.Filled.Settings        // ✅ Settings Icon
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp), // ✅ Adds spacing
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                val images = listOf(
+                    R.drawable.bankbottom,
+                    R.drawable.cardbottom,
+                    null, // ✅ Space for FAB
+                    R.drawable.currencybottom,
+                    R.drawable.settingicon
+                )
 
-            icons.forEachIndexed { index, icon ->
-                if (index == 2) {
-                    // ✅ Space for Floating Action Button (FAB)
-                    Spacer(modifier = Modifier.width(50.dp))
-                } else {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = null, // Static UI, no need for accessibility
-                        tint = Color.Gray, // ✅ Static gray color for all icons
-                        modifier = Modifier.size(24.dp)
-                    )
+                images.forEach { image ->
+                    if (image == null) {
+                        Spacer(modifier = Modifier.width(60.dp)) // ✅ Adds space for FAB
+                    } else {
+                        Image(
+                            painter = painterResource(id = image),
+                            contentDescription = null,
+                            modifier = Modifier.size(28.dp)
+                        )
+                    }
                 }
             }
         }
 
-        // ✅ Floating Action Button (FAB) in the Center
+        // ✅ Floating Action Button (FAB) Positioned in the Center of the Row
         FloatingActionButton(
-            onClick = {}, // No action, since it's static
+            onClick = {}, // No action, static FAB
             containerColor = loginlight, // ✅ Blue Color for FAB
             modifier = Modifier
-                .size(56.dp)
-                .align(Alignment.TopCenter)
-                .offset(y = (-30).dp), // ✅ Moves FAB up to create curve effect
+                .size(60.dp) // ✅ Bigger for better visibility
+                .offset(y = (0).dp) // ✅ Moves FAB up slightly
+                .align(Alignment.Center), // ✅ Ensures it aligns within the Row
             shape = CircleShape
         ) {
             Icon(
-                imageVector = Icons.Filled.Add, // ✅ Default "+" icon
-                contentDescription = null, // No action, so no need for content description
+                imageVector = Icons.Filled.Add,
+                contentDescription = null,
                 tint = Color.White
             )
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

@@ -3,9 +3,12 @@ package com.example.accbankandroid
 import android.media.Image
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,8 +44,23 @@ import com.example.accbankandroid.CommonComponents.BottomNavigation
 import com.example.accbankandroid.ui.theme.getGradientBrush
 import com.example.accbankandroid.ui.theme.loginlight
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.runtime.*
+import androidx.compose.ui.zIndex
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,12 +70,13 @@ fun AccountOverview() {
         modifier = Modifier
             .fillMaxSize()
             .background(getGradientBrush())
-            .systemBarsPadding() // ✅ Prevents overlap with system navigation bar
+            .systemBarsPadding() // ✅ Prevent overlap with system bars
     ) {
+        // ✅ Profile & Greeting Section
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f),
+                .weight(1f), // Allow it to take appropriate space
             contentAlignment = Alignment.Center
         ) {
             Column(
@@ -65,6 +84,8 @@ fun AccountOverview() {
                 modifier = Modifier.fillMaxSize()
             ) {
                 Spacer(modifier = Modifier.height(40.dp))
+
+                // ✅ Profile Image
                 Image(
                     painter = painterResource(id = R.drawable.profile),
                     contentDescription = "Profile",
@@ -76,6 +97,7 @@ fun AccountOverview() {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
+                // ✅ Welcome Text
                 Text(
                     text = "Welcome Danielle to\nAcceinfo Bank",
                     fontSize = 18.sp,
@@ -88,6 +110,7 @@ fun AccountOverview() {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
+                // ✅ Greeting Text
                 Text(
                     text = "Good Afternoon",
                     color = Color.White,
@@ -96,58 +119,205 @@ fun AccountOverview() {
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
+                Spacer(modifier = Modifier.height(20.dp))
+                AccountAndCardsSection()
+
             }
         }
 
-        // ✅ Static Bottom Navigation UI
+
+
+        // ✅ Bottom Navigation UI
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(70.dp)
                 .background(Color.Black)
-                .imePadding(), // ✅ Ensures padding if keyboard/system bars are present
+                .imePadding(),
             contentAlignment = Alignment.Center
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                val icons = listOf(
-                    Icons.Filled.AccountBalance,
-                    Icons.Filled.CreditCard,
-                    Icons.Filled.AttachMoney,
-                    Icons.Filled.Settings
-                )
+            BottomNavigation()
+        }
+    }
+}
 
-                icons.forEach { icon ->
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = null, // Static UI, no need for accessibility
-                        tint = Color.Gray, // ✅ Static gray color for all icons
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
-            }
 
-            // ✅ Floating Action Button (FAB)
-            FloatingActionButton(
-                onClick = {}, // No action, since it's static
-                containerColor = loginlight,
+@Composable
+fun AccountAndCardsSection() {
+    var selectedAccount by remember { mutableStateOf("Cards(3456)")}
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 10.dp)
+    ) {
+        // ✅ Account Section (Savings, Chequing, Loan)
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(20.dp),
+            elevation = CardDefaults.cardElevation(8.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White)
+        ) {
+            Column(
                 modifier = Modifier
-                    .size(56.dp)
-                    .align(Alignment.TopCenter)
-                    .offset(y = (-30).dp),
-                shape = CircleShape
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Top
             ) {
-                Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = null, // No action, so no need for content description
-                    tint = Color.White
-                )
+                // ✅ Row should be at the **top**
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 10.dp, bottom = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    AccountItem(
+                        title = "Savings(1234)",
+                        amount = "USD 1245.45",
+                        icon = R.drawable.bankicon,
+                        isSelected = selectedAccount == "Savings(1234)"
+                    ) { selectedAccount = "Savings(1234)" }
+
+                    AccountItem(
+                        title = "Cards(3456)",
+                        amount = "USD 2000.45",
+                        icon = R.drawable.cardicon,
+                        isSelected = selectedAccount == "Cards(3456)"
+                    ) { selectedAccount = "Cards(3456)" }
+
+                    AccountItem(
+                        title = "Loan(9999)",
+                        amount = "USD -555.45",
+                        icon = R.drawable.currencyicon,
+                        isSelected = selectedAccount == "Loan(9999)"
+                    ) { selectedAccount = "Loan(9999)" }
+                }
+
+                // ✅ Show extra section when an account is selected
+                if (selectedAccount == "Cards(3456)") {
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // ✅ Scrollable Credit Card Section
+                    LazyRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        contentPadding = PaddingValues(horizontal = 16.dp)
+                    ) {
+                        val cardImages = listOf(
+                            R.drawable.creditcard,
+                            R.drawable.creditcard,
+                            R.drawable.creditcard
+                        )
+
+                        items(cardImages) { cardImage ->
+                            CreditCardItem(cardImage)
+                        }
+                    }
+                }
             }
         }
     }
 }
+
+
+
+
+// ✅ Account Item Component (For Savings, Chequing, Loan)
+@Composable
+fun AccountItem(
+    title: String,
+    amount: String,
+    icon: Int,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .padding(4.dp)
+            .clickable { onClick() } // ✅ Click to select
+    ) {
+        // ✅ Wrap everything inside a Box
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.wrapContentSize()
+        ) {
+            // ✅ Main Icon Box
+            Box(
+                modifier = Modifier
+                    .size(60.dp) // ✅ Adjusted size
+                    .background(Color.White, shape = CircleShape)
+                    .border(2.dp, Color.Gray, CircleShape), // ✅ Grey border
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(id = icon),
+                    contentDescription = title,
+                    tint = Color.Gray,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+
+            // ✅ Checkmark Box Below
+            if (isSelected) {
+                Box(
+                    modifier = Modifier
+                        .size(30.dp) // ✅ Background circle size
+                        .align(Alignment.BottomEnd) // ✅ Align below the icon box
+                        .offset(y = 1.dp), // ✅ Move slightly down
+                    contentAlignment = Alignment.Center
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(30.dp) // ✅ Background size
+                            .background(
+                                brush = Brush.linearGradient(listOf(Color.Cyan, Color.Blue)),
+                                shape = CircleShape
+                            )
+                            .border(2.dp, Color.White, CircleShape) // ✅ White Border
+                    )
+
+                    Icon(
+                        imageVector = Icons.Default.Check, // ✅ Check icon
+                        contentDescription = "Selected",
+                        tint = Color.White, // ✅ White check inside
+                        modifier = Modifier.size(16.dp) // ✅ Proper size
+                    )
+                }
+            }
+        }
+
+        // ✅ Text stays below
+        Text(text = title, fontSize = 12.sp, color = Color.Gray)
+        Text(text = amount, fontSize = 14.sp, color = Color.Black, fontWeight = FontWeight.Bold)
+    }
+}
+
+
+
+
+
+
+
+@Composable
+fun CreditCardItem(cardImage: Int) {
+    Card(
+        modifier = Modifier
+            .size(width = 200.dp, height = 120.dp) // ✅ Increased width slightly for better visibility
+            .offset(y = 30.dp), // ✅ Moves cards slightly up to overlap
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(8.dp) // ✅ Elevation for depth effect
+    ) {
+        Image(
+            painter = painterResource(id = cardImage),
+            contentDescription = "Credit Card",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable
