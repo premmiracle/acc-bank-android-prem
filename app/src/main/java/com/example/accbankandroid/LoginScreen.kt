@@ -32,14 +32,14 @@ fun LoginScreen() {
     var passwordVisible by remember { mutableStateOf(false) }
     var keepLoggedIn by remember { mutableStateOf(false) }
 
-    // ✅ Detect Screen Orientation
+    // Detect Screen Orientation
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.screenWidthDp > configuration.screenHeightDp
 
-    // ✅ Remember scroll state for vertical scrolling
+    //  Remember scroll state for vertical scrolling
     val scrollState = rememberScrollState()
 
-    // ✅ Use BoxWithConstraints to dynamically adjust UI
+    //  Use BoxWithConstraints to dynamically adjust UI
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
@@ -54,7 +54,7 @@ fun LoginScreen() {
                 .padding(horizontal = if (isLandscape) 100.dp else 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // ✅ QUOTE SECTION
+            //  QUOTE SECTION
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -80,7 +80,7 @@ fun LoginScreen() {
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
 
-                // ✅ Underline Below the Quote
+                //  Underline Below the Quote
                 Spacer(modifier = Modifier.height(12.dp))
                 Box(
                     modifier = Modifier
@@ -90,10 +90,10 @@ fun LoginScreen() {
                 )
             }
 
-            // ✅ Adjust Spacing Based on Orientation
+            //  Adjust Spacing Based on Orientation
             Spacer(modifier = Modifier.height(if (isLandscape) 50.dp else 100.dp))
 
-            // ✅ Glassmorphic Email Field
+            //  Glassmorphic Email Field
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
@@ -114,7 +114,7 @@ fun LoginScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // ✅ Glassmorphic Password Field
+            //Glassmorphic Password Field
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
@@ -136,7 +136,7 @@ fun LoginScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // ✅ Left-Aligned Toggle Switch (Keep me logged in)
+            //Left-Aligned Toggle Switch (Keep me logged in)
             Row(
                 modifier = Modifier.fillMaxWidth(if (isLandscape) 0.7f else 1f),
                 verticalAlignment = Alignment.CenterVertically
@@ -165,7 +165,7 @@ fun LoginScreen() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // ✅ Sign In Button (Responsive)
+            // Sign In Button (Responsive)
             Button(
                 onClick = { /* Handle Login */ },
                 modifier = Modifier
@@ -184,7 +184,7 @@ fun LoginScreen() {
 
             Spacer(modifier = Modifier.height(if (isLandscape) 50.dp else 100.dp))
 
-            // ✅ Bottom Line
+            //  Bottom Line
             Box(
                 modifier = Modifier
                     .width(if (isLandscape) 200.dp else 300.dp)

@@ -55,6 +55,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,6 +67,7 @@ import androidx.compose.ui.zIndex
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountOverview() {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -144,81 +146,92 @@ fun AccountOverview() {
 
 @Composable
 fun AccountAndCardsSection() {
-    var selectedAccount by remember { mutableStateOf("Cards(3456)")}
+    var selectedAccount by remember { mutableStateOf("Cards(3456)") }
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 10.dp)
-    ) {
-        // ✅ Account Section (Savings, Chequing, Loan)
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(20.dp),
-            elevation = CardDefaults.cardElevation(8.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 20.dp)
         ) {
-            Column(
+            Card(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Top
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(20.dp),
+                elevation = CardDefaults.cardElevation(8.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
-                // ✅ Row should be at the **top**
-                Row(
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp, bottom = 10.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.SpaceBetween, // ✅ Pushes Row to top & LazyRow to center
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    AccountItem(
-                        title = "Savings(1234)",
-                        amount = "USD 1245.45",
-                        icon = R.drawable.bankicon,
-                        isSelected = selectedAccount == "Savings(1234)"
-                    ) { selectedAccount = "Savings(1234)" }
-
-                    AccountItem(
-                        title = "Cards(3456)",
-                        amount = "USD 2000.45",
-                        icon = R.drawable.cardicon,
-                        isSelected = selectedAccount == "Cards(3456)"
-                    ) { selectedAccount = "Cards(3456)" }
-
-                    AccountItem(
-                        title = "Loan(9999)",
-                        amount = "USD -555.45",
-                        icon = R.drawable.currencyicon,
-                        isSelected = selectedAccount == "Loan(9999)"
-                    ) { selectedAccount = "Loan(9999)" }
-                }
-
-                // ✅ Show extra section when an account is selected
-                if (selectedAccount == "Cards(3456)") {
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // ✅ Scrollable Credit Card Section
-                    LazyRow(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                        contentPadding = PaddingValues(horizontal = 16.dp)
+                    // ✅ Row should be at the **top**
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp, bottom = 10.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.Top
+//                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        val cardImages = listOf(
-                            R.drawable.creditcard,
-                            R.drawable.creditcard,
-                            R.drawable.creditcard
-                        )
+                        AccountItem(
+                            title = "Savings(1234)",
+                            amount = "USD 1245.45",
+                            icon = R.drawable.bankicon,
+                            isSelected = selectedAccount == "Savings(1234)"
+                        ) { selectedAccount = "Savings(1234)" }
 
-                        items(cardImages) { cardImage ->
-                            CreditCardItem(cardImage)
+                        AccountItem(
+                            title = "Cards(3456)",
+                            amount = "USD 2000.45",
+                            icon = R.drawable.cardicon,
+                            isSelected = selectedAccount == "Cards(3456)"
+                        ) { selectedAccount = "Cards(3456)" }
+
+                        AccountItem(
+                            title = "Loan(9999)",
+                            amount = "USD -555.45",
+                            icon = R.drawable.currencyicon,
+                            isSelected = selectedAccount == "Loan(9999)"
+                        ) { selectedAccount = "Loan(9999)" }
+                    }
+
+                    // ✅ Show extra section when an account is selected
+                    if (selectedAccount == "Cards(3456)") {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f), // ✅ Pushes LazyRow to center
+                            contentAlignment = Alignment.Center // ✅ Center align LazyRow
+                        ) {
+                            // ✅ Scrollable Credit Card Section (now overlaps the top section slightly)
+                            LazyRow(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center, // ✅ Center the cards
+                                contentPadding = PaddingValues(horizontal = 16.dp)
+                            ) {
+                                val cardImages = listOf(
+                                    R.drawable.creditcard,
+                                    R.drawable.creditcard,
+                                    R.drawable.creditcard
+                                )
+
+                                items(cardImages) { cardImage ->
+                                    CreditCardItem(cardImage)
+                                }
+                            }
                         }
                     }
                 }
             }
         }
-    }
+
 }
+
+
 
 
 
@@ -290,7 +303,8 @@ fun AccountItem(
 
         // ✅ Text stays below
         Text(text = title, fontSize = 12.sp, color = Color.Gray)
-        Text(text = amount, fontSize = 14.sp, color = Color.Black, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(5.dp))
+        Text(text = amount, fontSize = 12.sp, color = Color.Gray, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -304,16 +318,17 @@ fun AccountItem(
 fun CreditCardItem(cardImage: Int) {
     Card(
         modifier = Modifier
-            .size(width = 200.dp, height = 120.dp) // ✅ Increased width slightly for better visibility
-            .offset(y = 30.dp), // ✅ Moves cards slightly up to overlap
+            .size(width = 300.dp, height = 180.dp) // ✅ Set width and height for visibility
+            .offset(y = (-10).dp)  // ✅ Slightly move up
+            .padding(end = 20.dp),
         shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(8.dp) // ✅ Elevation for depth effect
+        elevation = CardDefaults.cardElevation(8.dp) // ✅ Elevation for shadow effect
     ) {
         Image(
             painter = painterResource(id = cardImage),
             contentDescription = "Credit Card",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop // ✅ Ensure image covers the entire card
         )
     }
 }
