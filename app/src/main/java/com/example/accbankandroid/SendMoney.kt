@@ -1,6 +1,7 @@
 package com.example.accbankandroid
 
-import android.renderscript.Sampler.Value
+import android.content.res.Configuration
+import android.text.style.BackgroundColorSpan
 import android.widget.NumberPicker.OnValueChangeListener
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -9,9 +10,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -47,34 +50,69 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.colorspace.WhitePoint
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.material.*
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Label
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.MailOutline
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+
+@Composable
+fun SendMoneyScreen() {
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(if (isLandscape) 30.dp else 16.dp) // Adjust padding based on orientation
+    ) {
+        if (isLandscape) {
+            Row(modifier = Modifier.fillMaxSize()) {
+                SendMoney(modifier = Modifier.weight(4f)) // First Column
+
+            }
+        } else {
+            Column(modifier = Modifier.fillMaxSize()) {
+                SendMoney()
+            }
+        }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview()
 @Composable
-fun SendMoney(){
+fun SendMoney(modifier: Modifier = Modifier){
 
     Column (
         modifier = Modifier.fillMaxSize()
-            .padding(16.dp)
+            .padding(10.dp)
             .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CenterAlignedTopAppBar(
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = Color.White
+            ),
             title = {
-                Text("Send Money", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                Text("Send Money", fontSize = 20.sp, fontWeight = FontWeight.Bold,fontFamily = FontFamily.SansSerif)
             },
             navigationIcon={
                 IconButton(onClick = { /* Handle back */ }){
@@ -118,7 +156,7 @@ fun SendMoney(){
             TabRow(
                 selectedTabIndex = selectedTabIndex,
                 modifier = Modifier.fillMaxWidth()
-                    .background(color = Color.Transparent),
+                    .background(color = Color.White),
 
                 indicator = {}
             ) {
@@ -132,7 +170,7 @@ fun SendMoney(){
                                 if (selectedTabIndex == index) {
                                     Modifier.background(Brush.verticalGradient(listOf(Color.Cyan,Color.Blue)))
                                 } else {
-                                    Modifier.background(Color.Transparent)
+                                    Modifier.background(Color.White)
                                 }
                             )
                             .padding(vertical = 10.dp, horizontal = 30.dp)
@@ -140,7 +178,8 @@ fun SendMoney(){
                         Text(
                             text = title,
                             color = if (selectedTabIndex == index) Color.White else Color.Gray,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily.SansSerif
                         )
                     }
                 }
@@ -164,7 +203,9 @@ fun NewTabContent() {
     var confirmsecurityanswer by remember { mutableStateOf("***********") }
     var message by remember { mutableStateOf("") } // State to store the input text
     val minLength = 250 // Minimum length for the message
+
     val scrollState = rememberScrollState()//scroll
+
         Spacer(modifier = Modifier.padding(3.dp))
         Text(
             text = ("VIA INTERAC E-TRANSFER"),
@@ -175,7 +216,7 @@ fun NewTabContent() {
             textAlign = TextAlign.Left,
             modifier = Modifier.fillMaxWidth().padding(start = 21.dp) // Ensures alignment works
         )
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -186,7 +227,7 @@ fun NewTabContent() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp),  // Adds padding around the card
-                shape = RoundedCornerShape(20.dp),  // Rounded corners
+                shape = RoundedCornerShape(22.dp),  // Rounded corners
                 colors = CardDefaults.cardColors(containerColor = Color.White),  // White background
                 elevation = CardDefaults.cardElevation(defaultElevation = 7.dp),  // Adds a slight shadow
                 border = BorderStroke(1.dp, Color.LightGray) , // Adds a subtle border
@@ -205,6 +246,7 @@ fun NewTabContent() {
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Medium,
                             color = Color.Gray,
+                            fontFamily = FontFamily.SansSerif,
                             letterSpacing = 2.sp  // Adjust this value as needed for spacing
                         )
                         Spacer(modifier = Modifier.height(5.dp))
@@ -212,15 +254,17 @@ fun NewTabContent() {
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Text("Chequing", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                            Text("Chequing", fontSize = 18.sp, fontWeight = FontWeight.Bold,fontFamily = FontFamily.SansSerif)
                             Text(
                                 "$1245.45",
                                 fontSize = 16.sp,
-                                color = Color.Green,
-                                fontWeight = FontWeight.Bold
+                                color = Color(0xFF2F8F59),
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = FontFamily.SansSerif,
+                                letterSpacing = 1.sp
                             )
                         }
-                        Text("******1234", fontSize = 16.sp, color = Color.Gray)
+                        Text("******1234", fontSize = 16.sp, color = Color.Gray,fontFamily = FontFamily.SansSerif)
                     }
                     Spacer(modifier = Modifier.height(10.dp)) // Space before the line
                     Divider(color = Color.Gray, thickness = 1.dp)
@@ -233,12 +277,13 @@ fun NewTabContent() {
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Medium,
                             color = Color.Gray,
+                            fontFamily = FontFamily.SansSerif,
                             letterSpacing = 2.sp  // Adjust this value as needed for spacing
                         )
                         Spacer(modifier = Modifier.height(5.dp))
-                        Text("SAM Peter", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                        Text("sam_test@gmail.com", fontSize = 16.sp, color = Color.Gray)
-                        Text("(416) 555-1234", fontSize = 16.sp, color = Color.Gray)
+                        Text("SAM Peter", fontSize = 18.sp, fontWeight = FontWeight.Bold,fontFamily = FontFamily.SansSerif)
+                        Text("sam_test@gmail.com", fontSize = 16.sp, color = Color.Gray,fontFamily = FontFamily.SansSerif)
+                        Text("(416) 555-1234", fontSize = 16.sp, color = Color.Gray,fontFamily = FontFamily.SansSerif)
                     }
                     Spacer(modifier = Modifier.height(10.dp)) // Space before the line
                     Divider(color = Color.Gray, thickness = 1.dp)
@@ -250,15 +295,21 @@ fun NewTabContent() {
                 ) {
                     TextField(
                         value = amount,
-                        onValueChange = { amount = it },
-                        label = { Text("HOW MUCH") },
+                        onValueChange = {
+                            amount = it.filter { char -> char.isDigit() || char == '.' } // Allow only numbers and decimals
+                        },
+                        label = { Text("HOW MUCH",fontFamily = FontFamily.SansSerif) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color.Transparent),
                         textStyle = TextStyle( // Apply bold styling
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
+                            fontFamily = FontFamily.SansSerif,
                             color = Color.Black // Ensure it's readable
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number // Opens numeric keyboard
                         ),
                         colors = TextFieldDefaults.textFieldColors(
                             containerColor = Color.White, // Set background to pure white
@@ -268,12 +319,20 @@ fun NewTabContent() {
                     )
                 }
                 Spacer(modifier = Modifier.height(10.dp)) // Space before the line
-                Divider(color = Color.Gray, thickness = 1.dp)
+                Divider(
+                    color = Color.Gray,
+                    thickness = 1.dp,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
 
                 NotifyRecipientDropdown()
 
                 Spacer(modifier = Modifier.height(10.dp)) // Space before the line
-                Divider(color = Color.Gray, thickness = 1.dp)
+                Divider(
+                    color = Color.Gray,
+                    thickness = 1.dp,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Column(
@@ -282,13 +341,14 @@ fun NewTabContent() {
                     TextField(
                         value = securityquestion,
                         onValueChange = { securityquestion = it },
-                        label = { Text("SECURITY QUESTION") },
+                        label = { Text("SECURITY QUESTION",fontFamily = FontFamily.SansSerif) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color.Transparent),
                         textStyle = TextStyle( // Apply bold styling
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
+                            fontFamily = FontFamily.SansSerif,
                             color = Color.Black // Ensure it's readable
                         ),
                         colors = TextFieldDefaults.textFieldColors(
@@ -300,7 +360,11 @@ fun NewTabContent() {
                 }
 
                 Spacer(modifier = Modifier.height(10.dp)) // Space before the line
-                Divider(color = Color.Gray, thickness = 1.dp)
+                Divider(
+                    color = Color.Gray,
+                    thickness = 1.dp,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Column(
@@ -309,13 +373,15 @@ fun NewTabContent() {
                     TextField(
                         value = securityanswer,
                         onValueChange = { securityanswer = it },
-                        label = { Text("SECURITY ANSWER") },
+                        visualTransformation = PasswordVisualTransformation(),
+                        label = { Text("SECURITY ANSWER",fontFamily = FontFamily.SansSerif) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color.Transparent),
                         textStyle = TextStyle( // Apply bold styling
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
+                            fontFamily = FontFamily.SansSerif,
                             color = Color.Black // Ensure it's readable
                         ),
                         colors = TextFieldDefaults.textFieldColors(
@@ -327,7 +393,11 @@ fun NewTabContent() {
                 }
 
                 Spacer(modifier = Modifier.height(10.dp)) // Space before the line
-                Divider(color = Color.Gray, thickness = 1.dp)
+                Divider(
+                    color = Color.Gray,
+                    thickness = 1.dp,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Column(
@@ -336,13 +406,15 @@ fun NewTabContent() {
                     TextField(
                         value = confirmsecurityanswer,
                         onValueChange = { confirmsecurityanswer = it },
-                        label = { Text("CONFIRM SECURITY ANSWER") },
+                        visualTransformation = PasswordVisualTransformation(),
+                        label = { Text("CONFIRM SECURITY ANSWER",fontFamily = FontFamily.SansSerif) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color.Transparent),
                         textStyle = TextStyle( // Apply bold styling
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
+                            fontFamily = FontFamily.SansSerif,
                             color = Color.Black // Ensure it's readable
                         ),
                         colors = TextFieldDefaults.textFieldColors(
@@ -354,7 +426,11 @@ fun NewTabContent() {
                 }
 
                 Spacer(modifier = Modifier.height(10.dp)) // Space before the line
-                Divider(color = Color.Gray, thickness = 1.dp)
+                Divider(
+                    color = Color.Gray,
+                    thickness = 1.dp,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Column(
@@ -364,50 +440,50 @@ fun NewTabContent() {
                         value = message,
                         onValueChange = { message = it },
                         label = { Text("MESSAGE") },
-                        placeholder = { Text("Optional (Maximum Characters 250)") },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(120.dp) // Adjust height to match the image
-                            .background(
-                                Color.White,
-                                shape = RoundedCornerShape(12.dp)
-                            ), // Rounded box
-                        textStyle = TextStyle(
-                            fontSize = 16.sp,
-                            color = Color.Black
-                        ),
+                            .height(80.dp),
+                        textStyle = TextStyle(fontSize = 16.sp),
                         colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color.White, // Set background to pure white
-                            focusedIndicatorColor = Color.Transparent, // Remove underline
+                            containerColor = Color.White,
+                            focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent
                         ),
-                        maxLines = 4
+                        placeholder = { Text("Optional (Maximum Characters 250)", color = Color.Gray) }
                     )
                     Spacer(modifier = Modifier.height(10.dp)) // Space before the line
-                    Divider(color = Color.Gray, thickness = 1.dp)
+                    Divider(
+                        color = Color.Gray,
+                        thickness = 1.dp,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                    )
                     Spacer(modifier = Modifier.height(20.dp))
                 }
 
             }
             Spacer(modifier = Modifier.height(10.dp))
             Button(
-                onClick = {/* Handle click */ },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                shape = RoundedCornerShape(48.dp), // Rounded corners
-                border = BorderStroke(1.dp, color = Color.White),
+                onClick = { /* Handle click */ },
+                shape = RoundedCornerShape(20.dp), // Rounded corners
+                border = BorderStroke(1.dp, Color.White), // White border
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent // Button background is transparent
+                ),
                 modifier = Modifier
-                    .background(
-                        Brush.verticalGradient(listOf(Color.Cyan, Color.Blue)),
-                        shape = RoundedCornerShape(20.dp)
-                    )
-                    .height(50.dp) // Smaller height
-                    .width(120.dp) // Adjust width as needed
-                    .align(Alignment.CenterHorizontally) // Centers horizontally
-                    .padding(vertical = 120.dp)
-
+                    .height(70.dp) // Button height
+                    .width(170.dp) // Button width
+                    .align(Alignment.CenterHorizontally) // Center horizontally
             ) {
-                Text(" ✔ Send", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize() // Ensure gradient covers entire button
+                        .background(Brush.verticalGradient(listOf(Color.Cyan, Color.Blue)), shape = RoundedCornerShape(20.dp)),
+                    contentAlignment = Alignment.Center // Center text
+                ) {
+                    Text("✔ Send", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp,fontFamily = FontFamily.SansSerif)
+                }
             }
+
         }
 
 }
@@ -427,7 +503,7 @@ fun NotifyRecipientDropdown() {
             value = selectedOption,
             onValueChange = {},
             readOnly = true,
-            label = { Text("Notify Recipient By") },
+            label = { Text("Notify Recipient By",fontFamily = FontFamily.SansSerif) },
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.Transparent)
@@ -435,7 +511,8 @@ fun NotifyRecipientDropdown() {
             textStyle = TextStyle(
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
-                color = Color.Black
+                color = Color.Black,
+                fontFamily = FontFamily.SansSerif
             ),
             trailingIcon = {
                 Icon(
@@ -452,21 +529,42 @@ fun NotifyRecipientDropdown() {
 
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.background(Color.White) // White dropdown background
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
-                    text = { Text(option) },
+                    text = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = if (selectedOption == option) Icons.Default.Check else Icons.Default.MailOutline,
+                                contentDescription = "Option Icon",
+                                tint = if (selectedOption == option) Color.Blue else Color.Gray,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = option,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = if (selectedOption == option) Color.Blue else Color.Black
+                            )
+                        }
+                    },
                     onClick = {
                         selectedOption = option
                         expanded = false
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(if (selectedOption == option) Color(0xFFE0F7FA) else Color.White)
+
                 )
             }
         }
     }
 }
+
 
 @Composable
 fun HistoryTabContent()
