@@ -1,19 +1,23 @@
 package com.example.accbankandroid
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,6 +25,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,12 +43,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
 @Composable
-fun RegistrationScreen()
-{
+fun RegistrationScreen(navController: NavController) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -51,10 +57,9 @@ fun RegistrationScreen()
     var confirmPasswordVisible by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
     var isRegistered by remember { mutableStateOf(false) }
+    var isRegistering by remember { mutableStateOf(false) } // State for showing loading indicator
 
-    // ✅ Remember scroll state for vertical scrolling
     val scrollState = rememberScrollState()
-
 
     Box(
         modifier = Modifier
@@ -62,13 +67,11 @@ fun RegistrationScreen()
             .background(getGradientBrush()) // Apply new gradient
             .padding(16.dp),
         contentAlignment = Alignment.Center
-
-    ){
-
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .verticalScroll(scrollState) // ✅ Enables scrolling
+                .verticalScroll(scrollState)
                 .padding(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -83,16 +86,17 @@ fun RegistrationScreen()
                     .padding(top = 20.dp)
                     .wrapContentWidth(Alignment.CenterHorizontally)
             )
+
             Spacer(modifier = Modifier.height(30.dp))
-            //  Email Field
+
+            // User ID/username TextField
             OutlinedTextField(
                 value = username,
                 onValueChange = { username = it },
                 label = { Text("User ID/username") },
                 singleLine = true,
                 shape = RoundedCornerShape(24.dp),
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 trailingIcon = {
                     IconButton(onClick = { /* Action to remember username */ }) {
                         Icon(painter = painterResource(id = android.R.drawable.ic_dialog_info), contentDescription = "Info", tint = Color.White)
@@ -109,10 +113,9 @@ fun RegistrationScreen()
                 )
             )
 
-
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Password Field with Eye Icon
+            // Password TextField
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
@@ -139,7 +142,7 @@ fun RegistrationScreen()
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Confirm Password Field with Eye Icon
+            // Confirm Password TextField
             OutlinedTextField(
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it },
@@ -163,6 +166,29 @@ fun RegistrationScreen()
                     containerColor = Color.White.copy(alpha = 0.1f)
                 )
             )
+            Spacer(modifier = Modifier.height(25.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Already have an account?",
+                    fontSize = 14.sp,
+                    color = Color.White.copy(alpha = 0.8f)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Login!",
+                    fontSize = 14.sp,
+                    color = Color.White.copy(alpha = 0.8f),
+                    modifier = Modifier.clickable {
+                        // Navigate to the Registration screen
+                        navController.navigate(NavigationRoutes.Login   .route)
+                    }
+                )
+            }
+
+            // Error Message Display
             if (errorMessage.isNotEmpty()) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -183,6 +209,7 @@ fun RegistrationScreen()
 
             Spacer(modifier = Modifier.height(40.dp))
 
+            // Register Button
             Button(
                 onClick = {
                     if (username.isEmpty()) {
@@ -192,17 +219,16 @@ fun RegistrationScreen()
                     } else if (password != confirmPassword) {
                         errorMessage = "Password and Confirm password do not match"
                     } else if (!isValidPassword(password)) {
-                        errorMessage = "Password must be at least 10 characters,with 1 letter, 1 special character, 1 number, 1 uppercase, and 1 lowercase"
+                        errorMessage = "Password must be at least 10 characters, with 1 letter, 1 special character, 1 number, 1 uppercase, and 1 lowercase"
                     } else {
                         errorMessage = "" // Clear error when valid
-                        isRegistered = true
-
+                        isRegistering = true
                     }
-                          },
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
-                shape = RoundedCornerShape(50.dp), // Fully rounded
+                shape = RoundedCornerShape(50.dp),
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White)
             ) {
@@ -210,20 +236,32 @@ fun RegistrationScreen()
             }
 
             Spacer(modifier = Modifier.height(100.dp))
-            if (isRegistered) {
-                PhoneNumberInputScreen()
+
+            // Show loading spinner when registering
+            if (isRegistering) {
+                CircularProgressIndicator(color = Color.White)
             }
-            /*Box(
-                modifier = Modifier
-                    .width(300.dp) // Underline length
-                    .height(2.dp) // Thickness
-                    .background(Color.White.copy(alpha = 0.5f))
-            )*/
+
+            // Handle navigation after registration
+            LaunchedEffect(isRegistering) {
+                if (isRegistering) {
+                    delay(2000) // Simulate delay for loading spinner
+                    isRegistering = false
+                    navController.navigate(NavigationRoutes.PhoneNumberInputScreen.route)
+                }
+            }
         }
     }
 }
+
 // Password validation function
 fun isValidPassword(password: String): Boolean {
     val regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#\$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?])[A-Za-z\\d!@#\$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]{10,}\$".toRegex()
     return password.matches(regex)
+}
+@Preview(showBackground = true)
+@Composable
+fun Registerview() {
+    val navController = rememberNavController() // Mock NavController for preview
+    RegistrationScreen(navController)
 }

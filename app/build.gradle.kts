@@ -40,7 +40,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -56,6 +55,10 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
+    implementation("androidx.biometric:biometric:1.1.0")
+    implementation("androidx.navigation:navigation-compose:2.8.7")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.7.8")
+//    implementation("androidx.fragment:fragment-ktx:1.8.6")
     implementation("androidx.compose.material:material-icons-extended:1.5.4") // Check for latest version
+    debugImplementation("androidx.compose.ui:ui-tooling:1.7.8")
 }

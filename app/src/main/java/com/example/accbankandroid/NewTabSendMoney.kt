@@ -577,95 +577,95 @@ fun NotifyRecipientDropdown() {
         }
     }
 }
-@Composable
-fun contactdropdown() {
-    var selectedRecipient by remember { mutableStateOf<Contact?>(null) }
-    var expanded by remember { mutableStateOf(false) }
-    var selectedIndex by remember { mutableStateOf(0) }  // ✅ Initialize selectedIndex properly
-
-    // Mock Contact List (Replace with API or Database Fetch)
-    val contacts = listOf(
-        Contact("Sam Peter", "sam_test@gmail.com", "(416)555-1234"),
-        Contact("John Doe", "john@example.com", "123-456-7890"),
-        Contact("Jane Smith", "jane@example.com", "987-654-3210"),
-        Contact("Mike Johnson", "mike@example.com", "555-666-7777")
-    )
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(12.dp)
-            .background(Color.White)
-    ) {
-        // SEND TO Label
-        Text(
-            text = "SEND TO",
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium,
-            color = Color.Gray,
-            fontFamily = FontFamily.SansSerif,
-            letterSpacing = 2.sp
-        )
-
-        Spacer(modifier = Modifier.height(5.dp))
-
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { expanded = !expanded }
-            ,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = selectedRecipient?.name?.let { name ->
-                    val nameParts = name.split(" ")
-                    val firstName = nameParts.getOrNull(0)?.replaceFirstChar { it.uppercaseChar() } ?: ""
-                    val remainingName = nameParts.drop(1).joinToString(" ")
-                    if (remainingName.isNotEmpty()) "$firstName $remainingName" else firstName
-                } ?: "Select Recipient",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                fontFamily = FontFamily.SansSerif,
-                modifier = Modifier.weight(1f) // Pushes icon to the end
-
-            )
-
-            Icon(
-                imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                contentDescription = "Dropdown Icon"
-            )
-        }
-        selectedRecipient?.let {
-            Text(it.email, fontSize = 16.sp, color = Color.Gray, fontFamily = FontFamily.SansSerif)
-            Text(it.phone, fontSize = 16.sp, color = Color.Gray, fontFamily = FontFamily.SansSerif)
-        }
-
-        // Dropdown Menu for Contact Selection
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier.background(Color.White)
-
-        ) {
-            contacts.forEach { contact ->
-                DropdownMenuItem(
-                    onClick = {
-                        selectedRecipient = contact
-                        expanded = false
-                    },
-                    text = {
-                        Column {
-                            Text(contact.name, fontSize = 18.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.SansSerif)
-                            Text(contact.email, fontSize = 16.sp, color = Color.Gray, fontFamily = FontFamily.SansSerif)
-                            Text(contact.phone, fontSize = 16.sp, color = Color.Gray, fontFamily = FontFamily.SansSerif)
-                        }
-                    }
-                )
-            }
-        }
-    }
-}
-
-data class Contact(val name: String, val email: String, val phone: String)
+//@Composable
+//fun contactdropdown() {
+//    var selectedRecipient by remember { mutableStateOf<Contact?>(null) }
+//    var expanded by remember { mutableStateOf(false) }
+//    var selectedIndex by remember { mutableStateOf(0) }  // ✅ Initialize selectedIndex properly
+//
+//    // Mock Contact List (Replace with API or Database Fetch)
+//    val contacts = listOf(
+//        Contact("Sam Peter", "sam_test@gmail.com", "(416)555-1234"),
+//        Contact("John Doe", "john@example.com", "123-456-7890"),
+//        Contact("Jane Smith", "jane@example.com", "987-654-3210"),
+//        Contact("Mike Johnson", "mike@example.com", "555-666-7777")
+//    )
+//
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(12.dp)
+//            .background(Color.White)
+//    ) {
+//        // SEND TO Label
+//        Text(
+//            text = "SEND TO",
+//            fontSize = 14.sp,
+//            fontWeight = FontWeight.Medium,
+//            color = Color.Gray,
+//            fontFamily = FontFamily.SansSerif,
+//            letterSpacing = 2.sp
+//        )
+//
+//        Spacer(modifier = Modifier.height(5.dp))
+//
+//
+//        Row(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .clickable { expanded = !expanded }
+//            ,
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            Text(
+//                text = selectedRecipient?.name?.let { name ->
+//                    val nameParts = name.split(" ")
+//                    val firstName = nameParts.getOrNull(0)?.replaceFirstChar { it.uppercaseChar() } ?: ""
+//                    val remainingName = nameParts.drop(1).joinToString(" ")
+//                    if (remainingName.isNotEmpty()) "$firstName $remainingName" else firstName
+//                } ?: "Select Recipient",
+//                fontSize = 18.sp,
+//                fontWeight = FontWeight.Bold,
+//                fontFamily = FontFamily.SansSerif,
+//                modifier = Modifier.weight(1f) // Pushes icon to the end
+//
+//            )
+//
+//            Icon(
+//                imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+//                contentDescription = "Dropdown Icon"
+//            )
+//        }
+//        selectedRecipient?.let {
+//            Text(it.email, fontSize = 16.sp, color = Color.Gray, fontFamily = FontFamily.SansSerif)
+//            Text(it.phone, fontSize = 16.sp, color = Color.Gray, fontFamily = FontFamily.SansSerif)
+//        }
+//
+//        // Dropdown Menu for Contact Selection
+//        DropdownMenu(
+//            expanded = expanded,
+//            onDismissRequest = { expanded = false },
+//            modifier = Modifier.background(Color.White)
+//
+//        ) {
+//            contacts.forEach { contact ->
+//                DropdownMenuItem(
+//                    onClick = {
+//                        selectedRecipient = contact
+//                        expanded = false
+//                    },
+//                    text = {
+//                        Column {
+//                            Text(contact.name, fontSize = 18.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.SansSerif)
+//                            Text(contact.email, fontSize = 16.sp, color = Color.Gray, fontFamily = FontFamily.SansSerif)
+//                            Text(contact.phone, fontSize = 16.sp, color = Color.Gray, fontFamily = FontFamily.SansSerif)
+//                        }
+//                    }
+//                )
+//            }
+//        }
+//    }
+//}
+//
+//data class Contact(val name: String, val email: String, val phone: String)
 

@@ -15,6 +15,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,6 +23,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,11 +39,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.accbankandroid.CommonComponents.BottomNavigation
 import com.example.accbankandroid.ui.theme.getGradientBrush
+import kotlinx.coroutines.delay
+
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
+//@Preview
 @Composable
-fun PhoneNumberInputScreen() {
+fun PhoneNumberInputScreen(navController: NavController) {
     var phoneNumber by remember { mutableStateOf("") }
     var countryCode by remember { mutableStateOf("+1") }  // Default country code (e.g., USA)
     var otpSent by remember { mutableStateOf(false) }
@@ -162,9 +168,24 @@ fun PhoneNumberInputScreen() {
                 ) {
                     Text(text = "Verify OTP", fontSize = 18.sp, color = Color.Black)
                 }
-                if(Isvarified){
-                    EmailOTPValidationScreen()
+
+
+
+                if (Isvarified) {
+                    CircularProgressIndicator(color = Color.White)
                 }
+
+                // Handle navigation after registration
+                LaunchedEffect(Isvarified) {
+                    if (Isvarified) {
+                        delay(2000) // Simulate delay for loading spinner
+                        Isvarified = false
+                        navController.navigate(NavigationRoutes.EmailOTPValidationScreen.route)
+                    }
+                }
+//                if(Isvarified){
+//                    navController.navigate(NavigationRoutes.EmailOTPValidationScreen.route)
+//                }
                 if (errorMessage.isNotEmpty()) {
                     Text(text = errorMessage, color = Color.Red, fontSize = 16.sp)
                 }

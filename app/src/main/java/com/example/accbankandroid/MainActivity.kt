@@ -1,25 +1,97 @@
 package com.example.accbankandroid
 
+//import android.hardware.biometrics.BiometricPrompt
+import androidx.biometric.BiometricPrompt
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.fragment.app.FragmentActivity
+import androidx.navigation.NavHostController
+import androidx.navigation.Navigation
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.accbankandroid.ui.theme.AccBankAndroidTheme
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            LoginScreen()
+            AccBankAndroidTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    val navController = rememberNavController()
+
+                    // Define the NavHost with a start destination
+                    NavHost(
+                        navController = navController,
+                        startDestination = NavigationRoutes.Login.route, // Initial screen
+                    ) {
+                        // Sign-In Screen
+                        composable(NavigationRoutes.Login.route) {
+                            LoginScreen(navController)
+                        }
+
+
+
+                        composable(NavigationRoutes.MainScreenWithBottomNav.route) {
+                            MainScreenWithBottomNav(navController)
+                        }
+
+                        composable(NavigationRoutes.MoveMoney.route) {
+                            MoveMoney(navController)
+                        }
+                        // Account Overview Screen
+                        composable(NavigationRoutes.AccountOverview.route) {
+                            AccountOverview(navController)
+                        }
+                        composable(NavigationRoutes.EmailOTPValidationScreen.route){
+                            EmailOTPValidationScreen(navController)
+                        }
+                        composable(NavigationRoutes.PhoneNumberInputScreen.route){
+                            PhoneNumberInputScreen(navController)
+                        }
+                        composable(NavigationRoutes.Registration.route){
+                            RegistrationScreen(navController)
+                        }
+                    }
+                }
+            }
         }
+//
+//        val executor: Executor = Executors.newSingleThreadExecutor()
+//
+//        val biometricPrompt = BiometricPrompt(
+//            this, // 'this' is now FragmentActivity, so BiometricPrompt can work
+//            executor,
+//            object : BiometricPrompt.AuthenticationCallback() {
+//                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+//                    super.onAuthenticationSucceeded(result)
+//                    // Handle successful authentication
+//                }
+//
+//                override fun onAuthenticationFailed() {
+//                    super.onAuthenticationFailed()
+//                    // Handle failed authentication
+//                }
+//            })
+//
+//        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+//            .setTitle("Biometric Login")
+//            .setSubtitle("Log in using your fingerprint")
+//            .setNegativeButtonText("Cancel")
+//            .build()
+//
+//        biometricPrompt.authenticate(promptInfo)  // Trigger biometric authentication
+
     }
 }
-

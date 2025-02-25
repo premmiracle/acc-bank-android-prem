@@ -2,6 +2,7 @@ package com.example.accbankandroid.CommonComponents
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,76 +23,85 @@ import androidx.compose.ui.unit.dp
 import com.example.accbankandroid.ui.theme.loginlight
 import com.example.accbankandroid.R
 import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.accbankandroid.NavigationRoutes
 
 @Composable
-fun BottomNavigation() {
+fun BottomNavigation(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(90.dp) // Increased height for better FAB alignment
-            .clip(shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)) // ✅ Adds curve
-            .background(Color.Transparent), // Transparent for floating effect
+            .height(90.dp)
+            .clip(shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+            .background(Color.Transparent),
         contentAlignment = Alignment.BottomCenter
     ) {
-        // ✅ Bottom Bar with Rounded Corners
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(75.dp)
-                .clip(shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)) // ✅ Adds curve
-                .background(Color.Black), // ✅ Dark Background
+                .clip(shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+                .background(Color.Black),
             contentAlignment = Alignment.Center
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 32.dp), // ✅ Adds spacing
+                    .padding(horizontal = 32.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                val images = listOf(
-                    R.drawable.bankbottom,
-                    R.drawable.cardbottom,
-                    null, // ✅ Space for FAB
-                    R.drawable.currencybottom,
-                    R.drawable.settingicon
+                val items = listOf(
+                    NavigationRoutes.AccountOverview.route to R.drawable.bankbottom,
+                    NavigationRoutes.Registration.route to R.drawable.cardbottom,
+                    null to null, // Space for FAB
+                    NavigationRoutes.PhoneNumberInputScreen.route to R.drawable.currencybottom,
+                    NavigationRoutes.EmailOTPValidationScreen.route to R.drawable.settingicon
                 )
 
-                images.forEach { image ->
+                items.forEach { (route, image) ->
                     if (image == null) {
-                        Spacer(modifier = Modifier.width(60.dp)) // ✅ Adds space for FAB
+                        Spacer(modifier = Modifier.width(60.dp)) // Space for FAB
                     } else {
                         Image(
                             painter = painterResource(id = image),
-                            contentDescription = null,
-                            modifier = Modifier.size(28.dp)
+                            contentDescription = route ?: "Navigation Icon",
+                            modifier = Modifier
+                                .size(28.dp)
+                                .clickable {
+                                    route?.let { navController.navigate(it) } // ✅ Only navigate if not null
+                                }
                         )
                     }
                 }
-            }
-        }
 
-        // ✅ Floating Action Button (FAB) Positioned in the Center of the Row
-        FloatingActionButton(
-            onClick = {}, // No action, static FAB
-            containerColor = loginlight, // ✅ Blue Color for FAB
-            modifier = Modifier
-                .size(60.dp) // ✅ Bigger for better visibility
-                .offset(y = (0).dp) // ✅ Moves FAB up slightly
-                .align(Alignment.Center), // ✅ Ensures it aligns within the Row
-            shape = CircleShape
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Add,
-                contentDescription = null,
-                tint = Color.White
-            )
+            }
+
+            // ✅ Floating Action Button (FAB)
+            FloatingActionButton(
+                onClick = {}, // Define FAB action if needed
+                containerColor = loginlight,
+                modifier = Modifier
+                    .size(60.dp)
+                    .offset(y = (0).dp)
+                    .align(Alignment.Center),
+                shape = CircleShape
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            }
         }
     }
 }
-
-
 @Preview(showBackground = true)
 @Composable
 fun PreviewBottomNavigation() {
-    BottomNavigation()
+    val navController = rememberNavController() // Mock NavController for preview
+    BottomNavigation(navController)
 }
+
+
+

@@ -1,7 +1,11 @@
 package com.example.accbankandroid
 
 import android.annotation.SuppressLint
+import androidx.biometric.BiometricManager
+//import android.hardware.biometrics.BiometricPrompt
+import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,20 +17,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.fragment.app.FragmentActivity
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.accbankandroid.ui.theme.getGradientBrush
 import com.example.accbankandroid.ui.theme.logintheme
 import com.example.accbankandroid.ui.theme.loginlight
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
+
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavHostController) {
+    // Inside your Composable function
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -38,6 +55,58 @@ fun LoginScreen() {
 
     //  Remember scroll state for vertical scrolling
     val scrollState = rememberScrollState()
+    var isAuthenticated by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    // Biometric Manager and Prompt Setup
+    val biometricManager = androidx.biometric.BiometricManager.from(context)
+    val executor: Executor = Executors.newSingleThreadExecutor()
+
+    // Create an instance of BiometricPrompt
+    val biometricPrompt = BiometricPrompt(
+        context as FragmentActivity, // Casting context to FragmentActivity
+        executor,
+        object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                super.onAuthenticationSucceeded(result)
+
+                CoroutineScope(Dispatchers.Main).launch {
+                    navController.navigate(NavigationRoutes.MainScreenWithBottomNav.route)
+                }
+            }
+
+
+            override fun onAuthenticationFailed() {
+                super.onAuthenticationFailed()
+                // Handle failed authentication (e.g., show an error message)
+            }
+
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                super.onAuthenticationError(errorCode, errString)
+                // Handle error (e.g., show a different error message or retry option)
+            }
+        }
+    )
+
+    // Prepare the prompt information
+    val promptInfo = BiometricPrompt.PromptInfo.Builder()
+        .setTitle("Biometric Login")
+        .setSubtitle("Log in using your fingerprint")
+        .setNegativeButtonText("Cancel")
+        .build()
+
+    // Trigger biometric authentication when the screen is loaded
+    LaunchedEffect(true) {
+        if (biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS) {
+            biometricPrompt.authenticate(promptInfo)
+        } else {
+            isAuthenticated = false
+        }
+    }
+
+    if (isAuthenticated) {
+        navController.navigate(NavigationRoutes.MainScreenWithBottomNav.route)
+    }
+
 
     //  Use BoxWithConstraints to dynamically adjust UI
     BoxWithConstraints(
@@ -163,11 +232,36 @@ fun LoginScreen() {
                 )
             }
 
+//            Spacer(modifier = Modifier.height(5.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(if (isLandscape) 0.7f else 1f),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Need to open an account?",
+                    fontSize = 14.sp,
+                    color = Color.White.copy(alpha = 0.8f)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Register!",
+                    fontSize = 14.sp,
+                    color = Color.White.copy(alpha = 0.8f),
+                    modifier = Modifier.clickable {
+                        // Navigate to the Registration screen
+                        navController.navigate(NavigationRoutes.Registration.route)
+                    }
+                )
+            }
+
             Spacer(modifier = Modifier.height(24.dp))
 
             // Sign In Button (Responsive)
             Button(
-                onClick = { /* Handle Login */ },
+                onClick = {
+                    // Navigate to the Account Overview screen using the route from the Sealed Class
+                    navController.navigate(NavigationRoutes.MainScreenWithBottomNav.route)
+                },
                 modifier = Modifier
                     .fillMaxWidth(if (isLandscape) 0.7f else 1f)
                     .height(if (isLandscape) 45.dp else 50.dp),
@@ -195,8 +289,10 @@ fun LoginScreen() {
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
-fun PreviewLoginScreen() {
-    LoginScreen()
+fun LoginScreenPreview() {
+    val navController = rememberNavController() // Mock NavController for preview
+    LoginScreen(navController)
 }

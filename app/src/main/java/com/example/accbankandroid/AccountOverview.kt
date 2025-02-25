@@ -62,11 +62,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.runtime.*
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountOverview() {
+fun AccountOverview(navController: NavHostController) {
 
     Column(
         modifier = Modifier
@@ -129,17 +131,17 @@ fun AccountOverview() {
 
 
 
-        // ✅ Bottom Navigation UI
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(70.dp)
-                .background(Color.Black)
-                .imePadding(),
-            contentAlignment = Alignment.Center
-        ) {
-            BottomNavigation()
-        }
+        //Bottom Navigation UI
+//        Box(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(70.dp)
+////                .background(Color.Black)
+//                .imePadding(),
+//            contentAlignment = Alignment.Center
+//        ) {
+//            BottomNavigation(navController)
+//        }
     }
 }
 
@@ -336,8 +338,11 @@ fun CreditCardItem(cardImage: Int) {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewAccountOverviewScreen() {
-    AccountOverview()
+fun AccountOverviewView() {
+    val navController = rememberNavController() // Mock NavController for preview
+    AccountOverview(navController)
 }
+
+
 
 

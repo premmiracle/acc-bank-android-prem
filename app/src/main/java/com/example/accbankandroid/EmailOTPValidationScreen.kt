@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,6 +21,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,14 +37,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.accbankandroid.ui.theme.getGradientBrush
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
 @Composable
-fun EmailOTPValidationScreen() {
+fun EmailOTPValidationScreen(navController: NavController) {
     var emailOTP by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
-    var isvalidOTP by remember { mutableStateOf(false) }
+    var isValidOTP by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(false) } // Loading state
 
     Box(
         modifier = Modifier
@@ -50,19 +53,15 @@ fun EmailOTPValidationScreen() {
             .background(getGradientBrush()) // Apply new gradient
             .padding(16.dp),
         contentAlignment = Alignment.Center
-
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                //.verticalScroll(rememberScrollState())
                 .padding(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
-
         ) {
-
             Text(
-                text = "Enter EmailAddress",
+                text = "Enter OTP sent to your Email",
                 fontSize = 26.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
@@ -73,10 +72,11 @@ fun EmailOTPValidationScreen() {
                     .wrapContentWidth(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.padding(16.dp))
+
             OutlinedTextField(
                 value = emailOTP,
                 onValueChange = { emailOTP = it },
-                label = { Text("Email") },
+                label = { Text("OTP") },
                 singleLine = true,
                 shape = RoundedCornerShape(24.dp),
                 modifier = Modifier
@@ -99,13 +99,13 @@ fun EmailOTPValidationScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Verify Email OTP Button
             Button(
                 onClick = {
                     if (emailOTP == "123456") { // Assuming OTP validation logic here
                         errorMessage = ""
-                        isvalidOTP=true
-                        //  LoginScreen() // Navigate to login screen after validation
+                        isLoading = true // Show loading before navigating
+                        // Simulate a delay to show the loading spinner before navigation
+                        isValidOTP = true
                     } else {
                         errorMessage = "Invalid OTP"
                     }
@@ -117,14 +117,25 @@ fun EmailOTPValidationScreen() {
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White)
             ) {
-                Text(text = if (isvalidOTP) "Resend OTP" else "Send OTP",
+                Text(
+                    text = if (isValidOTP) "Resend OTP" else "Send OTP",
                     fontSize = 18.sp,
                     color = Color.Black
                 )
             }
-            if(isvalidOTP)
-            {
-                LoginScreen()
+
+            // Show loading indicator while validating OTP
+            if (isLoading) {
+                Spacer(modifier = Modifier.height(16.dp))
+                CircularProgressIndicator(color = Color.White)
+            }
+
+            // Navigate to the login screen after OTP validation with delay to prevent flickering
+            LaunchedEffect(isValidOTP) {
+                if (isValidOTP) {
+                    delay(1500) // Slight delay to show the loading state
+                    navController.navigate(NavigationRoutes.Login.route)
+                }
             }
 
             if (errorMessage.isNotEmpty()) {
