@@ -29,20 +29,13 @@ import com.example.accbankandroid.NavigationRoutes
 
 @Composable
 fun BottomNavigation(navController: NavController) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(90.dp)
-            .clip(shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-            .background(Color.Transparent),
-        contentAlignment = Alignment.BottomCenter
-    ) {
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(75.dp)
                 .clip(shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                .background(Color.Black),
+                .background(Color.Black), // ✅ Slight transparency to blend with the background
             contentAlignment = Alignment.Center
         ) {
             Row(
@@ -53,7 +46,7 @@ fun BottomNavigation(navController: NavController) {
             ) {
                 val items = listOf(
                     NavigationRoutes.AccountOverview.route to R.drawable.bankbottom,
-                    NavigationRoutes.Registration.route to R.drawable.cardbottom,
+                    NavigationRoutes.MoveMoney.route to R.drawable.cardbottom,
                     null to null, // Space for FAB
                     NavigationRoutes.PhoneNumberInputScreen.route to R.drawable.currencybottom,
                     NavigationRoutes.EmailOTPValidationScreen.route to R.drawable.settingicon
@@ -69,12 +62,11 @@ fun BottomNavigation(navController: NavController) {
                             modifier = Modifier
                                 .size(28.dp)
                                 .clickable {
-                                    route?.let { navController.navigate(it) } // ✅ Only navigate if not null
+                                    route?.let { navController.navigate(it) }
                                 }
                         )
                     }
                 }
-
             }
 
             // ✅ Floating Action Button (FAB)
@@ -95,7 +87,8 @@ fun BottomNavigation(navController: NavController) {
             }
         }
     }
-}
+
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewBottomNavigation() {
