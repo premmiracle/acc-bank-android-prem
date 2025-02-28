@@ -16,4 +16,10 @@ sealed class NavigationRoutes(val route: String) {
     object Registration : NavigationRoutes("Registration")
     object MainScreenWithBottomNav : NavigationRoutes("MainScreenWithBottomNav")
     object MoveMoney : NavigationRoutes("MoveMoney")
+
+
+
+    // Interac e-Transfer Routes
+    object InteracETransfer : NavigationRoutes("interac_e_transfer")
+    object SendMoney : NavigationRoutes("send_money")
 }
