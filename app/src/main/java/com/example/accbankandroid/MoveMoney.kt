@@ -101,7 +101,10 @@
 
 package com.example.accbankandroid
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -112,6 +115,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -124,13 +128,15 @@ import com.example.accbankandroid.ui.theme.getGradientBrush
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoveMoney(navController: NavHostController) {
+    val context = LocalContext.current // Get the context for creating the Intent
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(getGradientBrush())
             .padding(16.dp)
     ) {
-        // ✅ Title
+        //   Title
         Text(
             text = "Move Money",
             fontSize = 22.sp,
@@ -138,7 +144,7 @@ fun MoveMoney(navController: NavHostController) {
             fontWeight = FontWeight.Bold
         )
 
-        // ✅ Scrollable Column for all options
+        //   Scrollable Column for all options
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -154,7 +160,7 @@ fun MoveMoney(navController: NavHostController) {
                     "Local Transfer" to Icons.Default.Home,
                     "Mobile Wallet" to Icons.Default.Smartphone,
                     "Crypto Transfer" to Icons.Default.CurrencyBitcoin
-                ))
+                ),navController, context)
             }
 
             item {
@@ -167,7 +173,7 @@ fun MoveMoney(navController: NavHostController) {
                     "Autodeposit Settings" to Icons.Default.Settings,
                     "Profile Settings" to Icons.Default.AccountCircle,
                     "Security Settings" to Icons.Default.Security
-                ))
+                ), navController, context)
             }
 
             item {
@@ -180,7 +186,7 @@ fun MoveMoney(navController: NavHostController) {
                     "Online Shopping" to Icons.Default.ShoppingCart,
                     "Subscription Services" to Icons.Default.Subscriptions,
                     "Government Taxes" to Icons.Default.AccountBalance
-                ))
+                ),navController, context)
             }
 
             item {
@@ -193,15 +199,15 @@ fun MoveMoney(navController: NavHostController) {
                     "Budget Planning" to Icons.Default.Assessment,
                     "Fixed Deposits" to Icons.Default.Savings,
                     "Pension Plans" to Icons.Default.AccountBalanceWallet
-                ))
+                ),navController, context)
             }
         }
     }
 }
 
-// ✅ Fixed 4 Columns, 2 Rows Layout Inside Cards Without Lazy Grid
+//   Fixed 4 Columns, 2 Rows Layout Inside Cards Without Lazy Grid
 @Composable
-fun TransferOptionsCard(title: String, options: List<Pair<String, androidx.compose.ui.graphics.vector.ImageVector>>) {
+fun TransferOptionsCard(title: String, options: List<Pair<String, androidx.compose.ui.graphics.vector.ImageVector>>,navController: NavHostController, context: Context) {
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -212,7 +218,7 @@ fun TransferOptionsCard(title: String, options: List<Pair<String, androidx.compo
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-            // ✅ Heading
+            //   Heading
             Text(
                 text = title,
                 fontSize = 20.sp,
@@ -221,10 +227,10 @@ fun TransferOptionsCard(title: String, options: List<Pair<String, androidx.compo
                 modifier = Modifier.padding(bottom = 12.dp)
             )
 
-            // ✅ Ensure Exactly 2 Rows and 4 Columns
+            //   Ensure Exactly 2 Rows and 4 Columns
             val columnCount = 4
             val rowCount = 2
-            val visibleOptions = options.take(columnCount * rowCount) // ✅ Ensure max 8 icons (4x2 layout)
+            val visibleOptions = options.take(columnCount * rowCount) //   Ensure max 8 icons (4x2 layout)
 
             for (rowItems in visibleOptions.chunked(columnCount)) {
                 Row(
@@ -238,23 +244,31 @@ fun TransferOptionsCard(title: String, options: List<Pair<String, androidx.compo
                                 .weight(1f)
                                 .padding(8.dp)
                         ) {
-                            // ✅ Simple Icon
+                            //   Simple Icon
                             Icon(
                                 imageVector = icon,
                                 contentDescription = label,
                                 tint = Color.Black,
-                                modifier = Modifier.size(28.dp) // ✅ Smaller icon size
+                                modifier = Modifier.size(28.dp) //   Smaller icon size
+                                    .clickable {
+                                        // Navigate to the appropriate screen when the icon is clicked
+                                        if (label == "Send Money") {
+                                            // Use Intent to navigate to SendMoneyActivity
+                                            val intent = Intent(context, SendMoneyActivity::class.java)
+                                            context.startActivity(intent)  // Start SendMoneyActivity
+                                        }
+                                    }
                             )
                             Spacer(modifier = Modifier.height(4.dp))
 
-                            // ✅ Wrapping Text Label
+                            //   Wrapping Text Label
                             Text(
                                 text = label,
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Medium,
                                 color = Color.Black,
                                 textAlign = TextAlign.Center,
-                                maxLines = 2 // ✅ Ensures text wraps properly
+                                maxLines = 2 //   Ensures text wraps properly
                             )
                         }
                     }
@@ -264,7 +278,7 @@ fun TransferOptionsCard(title: String, options: List<Pair<String, androidx.compo
     }
 }
 
-// ✅ Preview
+//   Preview
 @Preview(showBackground = true)
 @Composable
 fun MoveMoneyPreview() {

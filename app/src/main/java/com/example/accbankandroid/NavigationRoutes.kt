@@ -2,11 +2,6 @@ package com.example.accbankandroid
 
 import androidx.navigation.Navigation
 
-//object NavigationRoutes {
-//    const val Login = "sign_in"
-//    const val ACCOUNT_OVERVIEW = "account_overview"
-//}
-
 
 sealed class NavigationRoutes(val route: String) {
     object Login : NavigationRoutes("login")
@@ -16,10 +11,8 @@ sealed class NavigationRoutes(val route: String) {
     object Registration : NavigationRoutes("Registration")
     object MainScreenWithBottomNav : NavigationRoutes("MainScreenWithBottomNav")
     object MoveMoney : NavigationRoutes("MoveMoney")
+    object SendMoney : NavigationRoutes("send_money")//sure this is unique
+//    object SendMoney : NavigationRoutes("MoveMoneyOptions/Interac_E_Transfer/SendMoney")
 
-
-
-    // Interac e-Transfer Routes
-    object InteracETransfer : NavigationRoutes("interac_e_transfer")
-    object SendMoney : NavigationRoutes("send_money")
 }
+
