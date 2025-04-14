@@ -12,6 +12,8 @@ sealed class NavigationRoutes(val route: String) {
     object MainScreenWithBottomNav : NavigationRoutes("MainScreenWithBottomNav")
     object MoveMoney : NavigationRoutes("MoveMoney")
     object SendMoney : NavigationRoutes("send_money")//sure this is unique
+    //add contact
+    object AddContact : NavigationRoutes("AddContact")
 //    object SendMoney : NavigationRoutes("MoveMoneyOptions/Interac_E_Transfer/SendMoney")
 
 }

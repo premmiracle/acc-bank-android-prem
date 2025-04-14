@@ -49,7 +49,7 @@ fun BottomNavigation(navController: NavController) {
                     NavigationRoutes.MoveMoney.route to R.drawable.cardbottom,
                     null to null, // Space for FAB
                     NavigationRoutes.PhoneNumberInputScreen.route to R.drawable.currencybottom,
-                    NavigationRoutes.EmailOTPValidationScreen.route to R.drawable.settingicon
+                    NavigationRoutes.AddContact.route to R.drawable.settingicon
                 )
 
                 items.forEach { (route, image) ->

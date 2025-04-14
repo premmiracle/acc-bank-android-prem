@@ -37,6 +37,7 @@ private val LightColorScheme = lightColorScheme(
 
 val logintheme = Bluedarklogin
 val loginlight =LightBluedarklogin
+val cardgraylight = LightGrayCard
 
 val focusedBorderColor = Bluedarklogin
 fun getGradientBrush() = Brush.horizontalGradient(

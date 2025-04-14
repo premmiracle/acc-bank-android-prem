@@ -2,10 +2,12 @@ package com.example.accbankandroid
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -23,9 +25,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.accbankandroid.ui.theme.cardgraylight
 import com.example.accbankandroid.ui.theme.getGradientBrush
 import com.example.accbankandroid.ui.theme.loginlight
 import com.example.accbankandroid.ui.theme.logintheme
+import androidx.compose.ui.text.TextStyle
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,6 +82,8 @@ fun TransferOptionBox(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendMoney() {
+    var isChecked by remember { mutableStateOf(false) }
+
     val context = LocalContext.current // Get the context
     // States to track selected account data
 //    var selectedAccount by remember { mutableStateOf("Chequing") }
@@ -123,6 +132,14 @@ fun SendMoney() {
         }
 
         Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = "Transfer from",
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            color = cardgraylight, // This defines the text color
+            textAlign = TextAlign.Start, // Align text to the start (left)
+            modifier = Modifier.fillMaxWidth() // Ensure it takes the full width of its container
+        )
 
         // "Transfer from" dropdown option
         Card(
@@ -185,59 +202,135 @@ fun SendMoney() {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "Send To",
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            color = cardgraylight, // This defines the text color
+            textAlign = TextAlign.Start, // Align text to the start (left)
+            modifier = Modifier.fillMaxWidth() // Ensure it takes the full width of its container
+        )
+        fun loadContacts(context: Context): List<TransferContact> {
+            val file = File(context.filesDir, "contacts.json")
+            if (!file.exists()) return emptyList()
+
+            val jsonString = file.readText()
+            val type = object : TypeToken<List<TransferContact>>() {}.type
+            return Gson().fromJson(jsonString, type) ?: emptyList()
+        }
 
         // **Send To Box (Placeholder)**
-        Card(
-            shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F7)),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp)
+
+        var expanded by remember { mutableStateOf(false) }
+        var selectedContact by remember { mutableStateOf<TransferContact?>(null) }
+        var contactList by remember { mutableStateOf<List<TransferContact>>(emptyList()) }
+
+        // Dropdown Composable
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = {
+                expanded = !expanded
+                if (expanded) {
+                    // Fetch live contacts every time dropdown opens
+                    val file = File(context.filesDir, "contacts.json")
+                    if (file.exists()) {
+                        val jsonString = file.readText()
+                        val type = object : TypeToken<List<TransferContact>>() {}.type
+                        contactList = Gson().fromJson(jsonString, type) ?: emptyList()
+                    }
+                }
+            }
         ) {
-            Row(
+            // Display selected contact name
+            OutlinedTextField(
+                value = selectedContact?.name ?: "",
+                onValueChange = {},
+                readOnly = true,
+                label = { Text("Select Contact") },
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                    .menuAnchor()
+            )
+
+            // Contact dropdown menu
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
             ) {
-                Text(
-                    text = "Select Contact",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Gray
-                )
-                Icon(
-                    imageVector = Icons.Filled.KeyboardArrowDown,
-                    contentDescription = "Dropdown",
-                    tint = Color.Gray
-                )
+                contactList.forEach { contact ->
+                    DropdownMenuItem(
+                        text = { Text(contact.name) },
+                        onClick = {
+                            selectedContact = contact
+                            expanded = false
+                        }
+                    )
+                }
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
 
         // Add Contact button
-        Button(
-            onClick = { /* Handle add contact action */ },
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E90FF))
+//        FloatingActionButton(
+//            onClick = {}, // Define FAB action if needed
+//            containerColor = loginlight,
+//            modifier = Modifier
+//                .size(60.dp)
+//                .offset(y = (0).dp),
+//            shape = CircleShape
+//        ) {
+//            Icon(
+//                imageVector = Icons.Filled.Add,
+//                contentDescription = null,
+//                tint = Color.White
+//            )
+//        }
+//        Button(
+//            onClick = { /* Handle add contact action */ },
+//            shape = RoundedCornerShape(16.dp),
+//            modifier = Modifier.fillMaxWidth(),
+//            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E90FF))
+//        ) {
+//            Icon(Icons.Filled.Add, contentDescription = "Add contact", tint = Color.White)
+//            Spacer(modifier = Modifier.width(8.dp))
+//            Text("Add Contact", color = Color.White)
+//        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding( vertical = 8.dp)
+                .clickable { },
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(Icons.Filled.Add, contentDescription = "Add contact", tint = Color.White)
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("Add Contact", color = Color.White)
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .background(color = Color(0xFF1E90FF), shape = CircleShape)
+                    .clickable {
+                        context.startActivity(Intent(context, AddContactActivity::class.java))
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Add Contact",
+                    tint = Color.White,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            Text(
+                text = "Add Recipient",
+                color = Color(0xFF1E90FF),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium
+            )
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // "Send transfer to" field
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label = { Text("Send transfer to") },
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.fillMaxWidth()
-        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -245,7 +338,7 @@ fun SendMoney() {
         OutlinedTextField(
             value = "",
             onValueChange = {},
-            label = { Text("Amount") },
+            label = { Text("Enter transfer amount") },
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier.fillMaxWidth()
         )
@@ -262,26 +355,66 @@ fun SendMoney() {
         )
 
         Spacer(modifier = Modifier.height(24.dp))
+        // Add a checkbox with label similar to the one in the image
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(0xFFCAE8FF), shape = RoundedCornerShape(8.dp)) // Background color with rounded corners
+                .padding(16.dp) // Padding inside the Box
+        ) {
+            Row(
+                verticalAlignment = Alignment.Top
+            ) {
+                // Checkbox to toggle the acknowledgment
+                Checkbox(
+                    checked = isChecked,
+                    onCheckedChange = { isChecked = it },
+                    modifier = Modifier.padding(end = 8.dp),
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = Color(0xFF1E90FF), // Set your desired color for the checked state
+                        uncheckedColor = Color.Black // Set your desired color for the unchecked state
+                    )
+                )
 
+                // Text next to the checkbox
+                Text(
+                    text = "I acknowledge that this recipient has auto-deposit enabled. They won't need to answer a security question, and the funds will be deposited automatically.",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                    modifier = Modifier.weight(1f), // Make sure the text takes up available space
+                    style = TextStyle(
+                        lineHeight = 20.sp // Adjust the line height to increase line spacing
+                    )
+                )
+
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
         // Continue button
         Button(
             onClick = { /* Handle continue action */ },
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E90FF))
+            shape = RoundedCornerShape(16.dp), // Apply corner radius directly here
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(getGradientBrush(), shape = RoundedCornerShape(10.dp)) // Apply gradient with rounded corners
+                .padding(1.dp), // Optional padding for spacing around the button
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent) // Set container color to transparent to show gradient
         ) {
-            Text("Continue", color = Color.White)
+            Text(
+                text = "Continue",
+                color = Color.White, // Text color to contrast with the gradient
+                modifier = Modifier.padding(1.dp) // Padding for the text to align inside the button
+            )
         }
+
+
 
         Spacer(modifier = Modifier.height(16.dp))
 
         // Footer Text
-        Text(
-            text = "*Trade-mark of Interac Corp. Used under license.",
-            fontSize = 12.sp,
-            color = Color.Gray,
-            textAlign = TextAlign.Center
-        )
+
     }
 
     // **Bottom Sheet - Account Selection**

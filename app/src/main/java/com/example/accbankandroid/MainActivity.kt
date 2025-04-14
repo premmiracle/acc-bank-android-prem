@@ -143,10 +143,12 @@ class MainActivity : FragmentActivity() {
                                 SendMoney()  // Full-screen page
                             }
 
+
                             // Other bottom nav screens
                             composable(NavigationRoutes.EmailOTPValidationScreen.route) {
                                 EmailOTPValidationScreen(navController)
                             }
+
                             composable(NavigationRoutes.PhoneNumberInputScreen.route) {
                                 PhoneNumberInputScreen(navController)
                             }

@@ -1,51 +1,34 @@
 package com.example.accbankandroid
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.navigation.compose.rememberNavController
 import com.example.accbankandroid.ui.theme.getGradientBrush
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmailOTPValidationScreen(navController: NavController) {
-    var emailOTP by remember { mutableStateOf("") }
+    var otpValues by remember { mutableStateOf(Array(6) { "" }) }
     var errorMessage by remember { mutableStateOf("") }
     var isValidOTP by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) } // Loading state
+
+    // LocalFocusManager to handle focus transitions
+    val focusManager = LocalFocusManager.current
 
     Box(
         modifier = Modifier
@@ -65,7 +48,6 @@ fun EmailOTPValidationScreen(navController: NavController) {
                 fontSize = 26.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
-                fontFamily = FontFamily.SansSerif,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 20.dp)
@@ -73,35 +55,49 @@ fun EmailOTPValidationScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.padding(16.dp))
 
-            OutlinedTextField(
-                value = emailOTP,
-                onValueChange = { emailOTP = it },
-                label = { Text("OTP") },
-                singleLine = true,
-                shape = RoundedCornerShape(24.dp),
-                modifier = Modifier
-                    .fillMaxWidth(),
-                trailingIcon = {
-                    IconButton(onClick = { /* Action to remember username */ }) {
-                        Icon(painter = painterResource(id = android.R.drawable.ic_dialog_email), contentDescription = "Info", tint = Color.White)
-                    }
-                },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
-                    unfocusedLabelColor = Color.White,
-                    focusedLabelColor = Color.White,
-                    focusedBorderColor = Color.White.copy(alpha = 0.9f),
-                    unfocusedBorderColor = Color.White.copy(alpha = 0.5f),
-                    containerColor = Color.White.copy(alpha = 0.1f)
-                )
-            )
+            // OTP input fields
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(1.dp), // Adjust the spacing between boxes
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                for (i in otpValues.indices) {
+                    OutlinedTextField(
+                        value = otpValues[i],
+                        onValueChange = { newValue ->
+                            if (newValue.length <= 1) {
+                                otpValues[i] = newValue
+                                // Move focus to the next field if the OTP digit is entered
+                                if (newValue.isNotEmpty() && i < otpValues.size - 1) {
+                                    focusManager.moveFocus(FocusDirection.Next)
+                                }
+                            }
+                        },
+                        label = { Text("") },
+                        modifier = Modifier
+                            .weight(1f) // Makes each box flexible and fit in the screen
+                            .height(70.dp) // Increase height for better visibility
+                            .padding(3.dp), // Add padding for better layout
+                        singleLine = true,
+                        shape = RoundedCornerShape(16.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = Color.White,
+                            unfocusedBorderColor = Color.White.copy(alpha = 0.6f),
+                            containerColor = Color.White.copy(alpha = 0.1f),
+                            focusedTextColor = Color.White,  // Ensure text color is white
+                            unfocusedTextColor = Color.White // Ensure text color is white when unfocused
+                        ),
+                        textStyle = LocalTextStyle.current.copy(fontSize = 24.sp, color = Color.White) // Larger font size
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = {
-                    if (emailOTP == "123456") { // Assuming OTP validation logic here
+                    val enteredOTP = otpValues.joinToString("")
+                    if (enteredOTP == "123456") { // Assuming OTP validation logic here
                         errorMessage = ""
                         isLoading = true // Show loading before navigating
                         // Simulate a delay to show the loading spinner before navigation
@@ -143,4 +139,12 @@ fun EmailOTPValidationScreen(navController: NavController) {
             }
         }
     }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun EmailOTPValidationScreenPreview() {
+    val navController = rememberNavController()
+    EmailOTPValidationScreen(navController)
 }

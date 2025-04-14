@@ -13,3 +13,5 @@ val Pink40 = Color(0xFF7D5260)
 
 val Bluedarklogin = Color(0xFF004D6E) // Dark Blue
 val LightBluedarklogin = Color(0xFF1E90FF) // Light Blue
+
+val LightGrayCard = Color(0xFFDED6D6)
