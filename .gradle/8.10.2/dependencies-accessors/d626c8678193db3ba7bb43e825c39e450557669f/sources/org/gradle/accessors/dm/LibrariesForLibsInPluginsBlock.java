@@ -91,6 +91,7 @@ public class LibrariesForLibsInPluginsBlock extends AbstractExternalDependencyFa
         private final AndroidxComposeLibraryAccessors laccForAndroidxComposeLibraryAccessors = new AndroidxComposeLibraryAccessors(owner);
         private final AndroidxCoreLibraryAccessors laccForAndroidxCoreLibraryAccessors = new AndroidxCoreLibraryAccessors(owner);
         private final AndroidxEspressoLibraryAccessors laccForAndroidxEspressoLibraryAccessors = new AndroidxEspressoLibraryAccessors(owner);
+        private final AndroidxFoundationLibraryAccessors laccForAndroidxFoundationLibraryAccessors = new AndroidxFoundationLibraryAccessors(owner);
         private final AndroidxLifecycleLibraryAccessors laccForAndroidxLifecycleLibraryAccessors = new AndroidxLifecycleLibraryAccessors(owner);
         private final AndroidxUiLibraryAccessors laccForAndroidxUiLibraryAccessors = new AndroidxUiLibraryAccessors(owner);
 
@@ -166,6 +167,17 @@ public class LibrariesForLibsInPluginsBlock extends AbstractExternalDependencyFa
         public AndroidxEspressoLibraryAccessors getEspresso() {
             org.gradle.internal.deprecation.DeprecationLogger.deprecateBehaviour("Accessing libraries or bundles from version catalogs in the plugins block.").withAdvice("Only use versions or plugins from catalogs in the plugins block.").willBeRemovedInGradle9().withUpgradeGuideSection(8, "kotlin_dsl_deprecated_catalogs_plugins_block").nagUser();
             return laccForAndroidxEspressoLibraryAccessors;
+        }
+
+        /**
+         * Group of libraries at <b>androidx.foundation</b>
+         *
+         * @deprecated Will be removed in Gradle 9.0.
+         */
+        @Deprecated
+        public AndroidxFoundationLibraryAccessors getFoundation() {
+            org.gradle.internal.deprecation.DeprecationLogger.deprecateBehaviour("Accessing libraries or bundles from version catalogs in the plugins block.").withAdvice("Only use versions or plugins from catalogs in the plugins block.").willBeRemovedInGradle9().withUpgradeGuideSection(8, "kotlin_dsl_deprecated_catalogs_plugins_block").nagUser();
+            return laccForAndroidxFoundationLibraryAccessors;
         }
 
         /**
@@ -284,6 +296,52 @@ public class LibrariesForLibsInPluginsBlock extends AbstractExternalDependencyFa
         public Provider<MinimalExternalModuleDependency> getCore() {
             org.gradle.internal.deprecation.DeprecationLogger.deprecateBehaviour("Accessing libraries or bundles from version catalogs in the plugins block.").withAdvice("Only use versions or plugins from catalogs in the plugins block.").willBeRemovedInGradle9().withUpgradeGuideSection(8, "kotlin_dsl_deprecated_catalogs_plugins_block").nagUser();
             return create("androidx.espresso.core");
+        }
+
+    }
+
+    /**
+     * @deprecated Will be removed in Gradle 9.0.
+     */
+    @Deprecated
+    public static class AndroidxFoundationLibraryAccessors extends SubDependencyFactory {
+        private final AndroidxFoundationLayoutLibraryAccessors laccForAndroidxFoundationLayoutLibraryAccessors = new AndroidxFoundationLayoutLibraryAccessors(owner);
+
+        public AndroidxFoundationLibraryAccessors(AbstractExternalDependencyFactory owner) { super(owner); }
+
+        /**
+         * Group of libraries at <b>androidx.foundation.layout</b>
+         *
+         * @deprecated Will be removed in Gradle 9.0.
+         */
+        @Deprecated
+        public AndroidxFoundationLayoutLibraryAccessors getLayout() {
+            org.gradle.internal.deprecation.DeprecationLogger.deprecateBehaviour("Accessing libraries or bundles from version catalogs in the plugins block.").withAdvice("Only use versions or plugins from catalogs in the plugins block.").willBeRemovedInGradle9().withUpgradeGuideSection(8, "kotlin_dsl_deprecated_catalogs_plugins_block").nagUser();
+            return laccForAndroidxFoundationLayoutLibraryAccessors;
+        }
+
+    }
+
+    /**
+     * @deprecated Will be removed in Gradle 9.0.
+     */
+    @Deprecated
+    public static class AndroidxFoundationLayoutLibraryAccessors extends SubDependencyFactory {
+
+        public AndroidxFoundationLayoutLibraryAccessors(AbstractExternalDependencyFactory owner) { super(owner); }
+
+        /**
+         * Dependency provider for <b>android</b> with <b>androidx.compose.foundation:foundation-layout-android</b> coordinates and
+         * with version reference <b>foundationLayoutAndroid</b>
+         * <p>
+         * This dependency was declared in catalog libs.versions.toml
+         *
+         * @deprecated Will be removed in Gradle 9.0.
+         */
+        @Deprecated
+        public Provider<MinimalExternalModuleDependency> getAndroid() {
+            org.gradle.internal.deprecation.DeprecationLogger.deprecateBehaviour("Accessing libraries or bundles from version catalogs in the plugins block.").withAdvice("Only use versions or plugins from catalogs in the plugins block.").willBeRemovedInGradle9().withUpgradeGuideSection(8, "kotlin_dsl_deprecated_catalogs_plugins_block").nagUser();
+            return create("androidx.foundation.layout.android");
         }
 
     }
@@ -525,6 +583,16 @@ public class LibrariesForLibsInPluginsBlock extends AbstractExternalDependencyFa
          * This version was declared in catalog libs.versions.toml
          */
         public Provider<String> getEspressoCore() { return getVersion("espressoCore"); }
+
+        /**
+         * Version alias <b>foundationLayoutAndroid</b> with value <b>1.7.2</b>
+         * <p>
+         * If the version is a rich version and cannot be represented as a
+         * single version string, an empty string is returned.
+         * <p>
+         * This version was declared in catalog libs.versions.toml
+         */
+        public Provider<String> getFoundationLayoutAndroid() { return getVersion("foundationLayoutAndroid"); }
 
         /**
          * Version alias <b>junit</b> with value <b>4.13.2</b>

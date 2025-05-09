@@ -48,6 +48,9 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.layout.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -59,6 +62,12 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.8.7")
     implementation("androidx.compose.ui:ui-tooling-preview:1.7.8")
     implementation ("com.google.code.gson:gson:2.8.8")
+
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
+
 
 //    implementation("androidx.fragment:fragment-ktx:1.8.6")
     implementation("androidx.compose.material:material-icons-extended:1.5.4") // Check for latest version

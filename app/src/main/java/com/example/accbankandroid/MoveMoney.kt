@@ -1,391 +1,3 @@
-////package com.example.accbankandroid
-////
-////import androidx.compose.foundation.background
-////import androidx.compose.foundation.clickable
-////import androidx.compose.foundation.layout.*
-////import androidx.compose.foundation.shape.RoundedCornerShape
-////import androidx.compose.material3.*
-////import androidx.compose.runtime.Composable
-////import androidx.compose.ui.Alignment
-////import androidx.compose.ui.Modifier
-////import androidx.compose.ui.graphics.Color
-////import androidx.compose.ui.platform.LocalContext
-////import androidx.compose.ui.text.TextStyle
-////import androidx.compose.ui.text.font.FontStyle
-////import androidx.compose.ui.text.font.FontWeight
-////import androidx.compose.ui.tooling.preview.Preview
-////import androidx.compose.ui.unit.dp
-////import androidx.compose.ui.unit.sp
-////import androidx.navigation.NavHostController
-////import androidx.navigation.compose.rememberNavController
-////import com.example.accbankandroid.ui.theme.getGradientBrush
-////
-////@OptIn(ExperimentalMaterial3Api::class)
-////@Composable
-////fun MoveMoney(navController: NavHostController) {
-////    val backgroundColor = Color(0xFFB3E5FC) // Light blue background
-////    val cardColor = Color(0xFF222222) // Dark card color
-////
-////    Column(
-////        modifier = Modifier
-////            .fillMaxSize()
-////            .background(getGradientBrush())
-////            .padding(16.dp),
-////        horizontalAlignment = Alignment.CenterHorizontally
-////    ) {
-////        // Title
-////        Text(
-////            text = "Move money",
-////            fontSize = 22.sp,
-////            color = Color.White,
-////            fontWeight = FontWeight.Bold,
-////            modifier = Modifier.padding(bottom = 20.dp)
-////        )
-////
-////        // List of Money Transfer Options
-////        MoneyOptionCard("Transfers", navController, cardColor)
-////        MoneyOptionCard("Interac e-Transfer®", navController, cardColor, isItalic = true)
-////        MoneyOptionCard("Payments", navController, cardColor)
-////        MoneyOptionCard("Scheduled transfers & payments", navController, cardColor)
-////    }
-////}
-////
-////@Composable
-////fun MoneyOptionCard(title: String, navController: NavHostController, cardColor: Color, isItalic: Boolean = false) {
-////    Card(
-////        shape = RoundedCornerShape(8.dp),
-////        colors = CardDefaults.cardColors(containerColor = cardColor),
-////        modifier = Modifier
-////            .fillMaxWidth()
-////            .padding(vertical = 6.dp)
-////            .height(50.dp)
-////            .clickable {
-////                // Handle navigation or action here
-////                // Example: navController.navigate("transfer_screen")
-////            }
-////    ) {
-////        Row(
-////            modifier = Modifier
-////                .fillMaxSize()
-////                .padding(horizontal = 16.dp),
-////            verticalAlignment = Alignment.CenterVertically
-////        ) {
-////            // Text
-////            Text(
-////                text = title,
-////                fontSize = 16.sp,
-////                color = Color.White,
-////                style = TextStyle(
-////                    fontWeight = FontWeight.Medium,
-////                    fontStyle = if (isItalic) FontStyle.Italic else FontStyle.Normal
-////                ),
-////                modifier = Modifier.weight(1f)
-////            )
-////
-////            // Arrow Icon (→)
-////            Text(
-////                text = "›",
-////                fontSize = 20.sp,
-////                fontWeight = FontWeight.Bold,
-////                color = Color.White
-////            )
-////        }
-////    }
-////}
-////@Preview(showBackground = true)
-////@Composable
-////fun MoveMoneyPreview() {
-////    val navController = rememberNavController()
-////    MoveMoney(navController)
-////}
-//
-//package com.example.accbankandroid
-//
-//import android.content.Context
-//import android.content.Intent
-//import androidx.compose.foundation.background
-//import androidx.compose.foundation.clickable
-//import androidx.compose.foundation.layout.*
-//import androidx.compose.foundation.lazy.LazyColumn
-//import androidx.compose.foundation.shape.RoundedCornerShape
-//import androidx.compose.material.icons.Icons
-//import androidx.compose.material.icons.filled.*
-//import androidx.compose.material3.*
-//import androidx.compose.runtime.*
-//import androidx.compose.ui.Alignment
-//import androidx.compose.ui.Modifier
-//import androidx.compose.ui.graphics.Color
-//import androidx.compose.ui.platform.LocalContext
-//import androidx.compose.ui.text.font.FontWeight
-//import androidx.compose.ui.text.style.TextAlign
-//import androidx.compose.ui.tooling.preview.Preview
-//import androidx.compose.ui.unit.dp
-//import androidx.compose.ui.unit.sp
-//import androidx.navigation.NavHostController
-//import androidx.navigation.compose.rememberNavController
-//import com.example.accbankandroid.ui.theme.getGradientBrush
-//
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun MoveMoney(navController: NavHostController) {
-//    val context = LocalContext.current // Get the context for creating the Intent
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .background(getGradientBrush())
-//            .padding(16.dp)
-//    ) {
-//        //   Title
-//        Text(
-//            text = "Move Money",
-//            fontSize = 22.sp,
-//            color = Color.White,
-//            fontWeight = FontWeight.Bold
-//        )
-//
-//        //   Scrollable Column for all options
-//        LazyColumn(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(top = 16.dp)
-//        ) {
-//            item {
-//                TransferOptionsCard("Transfers", listOf(
-//                    "Bank Transfer" to Icons.Default.ArrowForward,
-//                    "Wire Transfer" to Icons.Default.Sync,
-//                    "International" to Icons.Default.Public,
-//                    "Instant Transfer" to Icons.Default.Bolt,
-//                    "Quick Pay" to Icons.Default.Payment,
-//                    "Local Transfer" to Icons.Default.Home,
-//                    "Mobile Wallet" to Icons.Default.Smartphone,
-//                    "Crypto Transfer" to Icons.Default.CurrencyBitcoin
-//                ),navController, context)
-//            }
-//
-//            item {
-//                TransferOptionsCard("Interac e-Transfer®", listOf(
-//                    "Send Money" to Icons.Default.Send,
-//                    "Request Money" to Icons.Default.RequestPage,
-//                    "Manage Contacts" to Icons.Default.Person,
-//                    "Pending Transfers" to Icons.Default.Schedule,
-//                    "Transaction History" to Icons.Default.History,
-//                    "Autodeposit Settings" to Icons.Default.Settings,
-//                    "Profile Settings" to Icons.Default.AccountCircle,
-//                    "Security Settings" to Icons.Default.Security
-//                ), navController, context)
-//            }
-//
-//            item {
-//                TransferOptionsCard("Payments", listOf(
-//                    "Utility Bills" to Icons.Default.Receipt,
-//                    "Credit Card Payments" to Icons.Default.CreditCard,
-//                    "Loan Repayments" to Icons.Default.Money,
-//                    "Insurance Payments" to Icons.Default.Home,
-//                    "Education Fees" to Icons.Default.School,
-//                    "Online Shopping" to Icons.Default.ShoppingCart,
-//                    "Subscription Services" to Icons.Default.Subscriptions,
-//                    "Government Taxes" to Icons.Default.AccountBalance
-//                ),navController, context)
-//            }
-//
-//            item {
-//                TransferOptionsCard("Scheduled Transfers", listOf(
-//                    "Recurring Payments" to Icons.Default.Repeat,
-//                    "Future Transfers" to Icons.Default.DateRange,
-//                    "Auto Payments" to Icons.Default.Done,
-//                    "Subscription Management" to Icons.Default.Subscriptions,
-//                    "Investment Plans" to Icons.Default.TrendingUp,
-//                    "Budget Planning" to Icons.Default.Assessment,
-//                    "Fixed Deposits" to Icons.Default.Savings,
-//                    "Pension Plans" to Icons.Default.AccountBalanceWallet
-//                ),navController, context)
-//            }
-//        }
-//    }
-//}
-//
-////   Fixed 4 Columns, 2 Rows Layout Inside Cards Without Lazy Grid
-//@Composable
-//fun TransferOptionsCard(title: String, options: List<Pair<String, androidx.compose.ui.graphics.vector.ImageVector>>,navController: NavHostController, context: Context) {
-//    Card(
-//        shape = RoundedCornerShape(12.dp),
-//        colors = CardDefaults.cardColors(containerColor = Color.White),
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(vertical = 8.dp)
-//    ) {
-//        Column(
-//            modifier = Modifier.padding(16.dp)
-//        ) {
-//            //   Heading
-//            Text(
-//                text = title,
-//                fontSize = 20.sp,
-//                fontWeight = FontWeight.Bold,
-//                color = Color.Black,
-//                modifier = Modifier.padding(bottom = 12.dp)
-//            )
-//
-//            //   Ensure Exactly 2 Rows and 4 Columns
-//            val columnCount = 4
-//            val rowCount = 2
-//            val visibleOptions = options.take(columnCount * rowCount) //   Ensure max 8 icons (4x2 layout)
-//
-//            for (rowItems in visibleOptions.chunked(columnCount)) {
-//                Row(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    horizontalArrangement = Arrangement.SpaceEvenly
-//                ) {
-//                    for ((label, icon) in rowItems) {
-//                        Column(
-//                            horizontalAlignment = Alignment.CenterHorizontally,
-//                            modifier = Modifier
-//                                .weight(1f)
-//                                .padding(8.dp)
-//                        ) {
-//                            //   Simple Icon
-//                            Icon(
-//                                imageVector = icon,
-//                                contentDescription = label,
-//                                tint = Color.Black,
-//                                modifier = Modifier.size(28.dp) //   Smaller icon size
-//                                    .clickable {
-//                                        // Navigate to the appropriate screen when the icon is clicked
-//                                        if (label == "Send Money") {
-//                                            // Use Intent to navigate to SendMoneyActivity
-//                                            val intent = Intent(context, SendMoneyActivity::class.java)
-//                                            context.startActivity(intent)  // Start SendMoneyActivity
-//                                        }
-//                                    }
-//                            )
-//                            Spacer(modifier = Modifier.height(4.dp))
-//
-//                            //   Wrapping Text Label
-//                            Text(
-//                                text = label,
-//                                fontSize = 12.sp,
-//                                fontWeight = FontWeight.Medium,
-//                                color = Color.Black,
-//                                textAlign = TextAlign.Center,
-//                                maxLines = 2 //   Ensures text wraps properly
-//                            )
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
-//
-////   Preview
-//@Preview(showBackground = true)
-//@Composable
-//fun MoveMoneyPreview() {
-//    val navController = rememberNavController()
-//    MoveMoney(navController)
-//}
-//package com.example.accbankandroid
-//
-//import androidx.compose.foundation.background
-//import androidx.compose.foundation.clickable
-//import androidx.compose.foundation.layout.*
-//import androidx.compose.foundation.shape.RoundedCornerShape
-//import androidx.compose.material3.*
-//import androidx.compose.runtime.Composable
-//import androidx.compose.ui.Alignment
-//import androidx.compose.ui.Modifier
-//import androidx.compose.ui.graphics.Color
-//import androidx.compose.ui.platform.LocalContext
-//import androidx.compose.ui.text.TextStyle
-//import androidx.compose.ui.text.font.FontStyle
-//import androidx.compose.ui.text.font.FontWeight
-//import androidx.compose.ui.tooling.preview.Preview
-//import androidx.compose.ui.unit.dp
-//import androidx.compose.ui.unit.sp
-//import androidx.navigation.NavHostController
-//import androidx.navigation.compose.rememberNavController
-//import com.example.accbankandroid.ui.theme.getGradientBrush
-//
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun MoveMoney(navController: NavHostController) {
-//    val backgroundColor = Color(0xFFB3E5FC) // Light blue background
-//    val cardColor = Color(0xFF222222) // Dark card color
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .background(getGradientBrush())
-//            .padding(16.dp),
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        // Title
-//        Text(
-//            text = "Move money",
-//            fontSize = 22.sp,
-//            color = Color.White,
-//            fontWeight = FontWeight.Bold,
-//            modifier = Modifier.padding(bottom = 20.dp)
-//        )
-//
-//        // List of Money Transfer Options
-//        MoneyOptionCard("Transfers", navController, cardColor)
-//        MoneyOptionCard("Interac e-Transfer®", navController, cardColor, isItalic = true)
-//        MoneyOptionCard("Payments", navController, cardColor)
-//        MoneyOptionCard("Scheduled transfers & payments", navController, cardColor)
-//    }
-//}
-//
-//@Composable
-//fun MoneyOptionCard(title: String, navController: NavHostController, cardColor: Color, isItalic: Boolean = false) {
-//    Card(
-//        shape = RoundedCornerShape(8.dp),
-//        colors = CardDefaults.cardColors(containerColor = cardColor),
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(vertical = 6.dp)
-//            .height(50.dp)
-//            .clickable {
-//                // Handle navigation or action here
-//                // Example: navController.navigate("transfer_screen")
-//            }
-//    ) {
-//        Row(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(horizontal = 16.dp),
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//            // Text
-//            Text(
-//                text = title,
-//                fontSize = 16.sp,
-//                color = Color.White,
-//                style = TextStyle(
-//                    fontWeight = FontWeight.Medium,
-//                    fontStyle = if (isItalic) FontStyle.Italic else FontStyle.Normal
-//                ),
-//                modifier = Modifier.weight(1f)
-//            )
-//
-//            // Arrow Icon (→)
-//            Text(
-//                text = "›",
-//                fontSize = 20.sp,
-//                fontWeight = FontWeight.Bold,
-//                color = Color.White
-//            )
-//        }
-//    }
-//}
-//@Preview(showBackground = true)
-//@Composable
-//fun MoveMoneyPreview() {
-//    val navController = rememberNavController()
-//    MoveMoney(navController)
-//}
-
 package com.example.accbankandroid
 
 import android.content.Intent
@@ -397,7 +9,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.AutoMode
+import androidx.compose.material.icons.filled.CompareArrows
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.ManageAccounts
 import androidx.compose.material.icons.filled.Payment
+import androidx.compose.material.icons.filled.PendingActions
+import androidx.compose.material.icons.filled.PersonAddAlt1
+import androidx.compose.material.icons.filled.RequestPage
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.*
@@ -423,26 +42,26 @@ import com.example.accbankandroid.ui.theme.getGradientBrush
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoveMoney(navController: NavHostController) {
-    val context = LocalContext.current // Get the context for creating the Intent
+    val context = LocalContext.current
     val sheetState = rememberModalBottomSheetState()
     var showSheet by remember { mutableStateOf(false) }
+
+    var selectedSheetType by remember { mutableStateOf<BottomSheetContentType?>(null) }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(getGradientBrush()) //   Ensure background stays visible
+            .background(getGradientBrush())
     ) {
-        //   Blurred and Dimmed Background Layer
         if (showSheet) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.3f)) //   Dim effect when sheet is open
-                    .blur(10.dp) //   Apply blur
+                    .background(Color.Black.copy(alpha = 0.3f))
+                    .blur(10.dp)
             )
         }
 
-        //   Main Content Layer
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -456,35 +75,151 @@ fun MoveMoney(navController: NavHostController) {
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 20.dp)
             )
-            // Card that holds the options
+
             Card(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
                 elevation = CardDefaults.cardElevation(8.dp),
                 colors = CardDefaults.cardColors(containerColor = cardgraylight)
             ) {
                 Column(modifier = Modifier.padding(8.dp)) {
-                    MoneyOptionCard("Transfers", Icons.Filled.AccountBalance, "Own bank accounts", navController) { showSheet = false }
-                    MoneyOptionCard("Interac e-Transfer®", Icons.Filled.Send, "Send or request money", navController) { showSheet = true }
-                    MoneyOptionCard("Payments", Icons.Filled.Payment, "Transfer funds between Canadian banks", navController) { showSheet = false }
-                    MoneyOptionCard("Scheduled Transfers", Icons.Filled.Schedule, "Send money to your client", navController) { showSheet = false }
+                    MoneyOptionCard("Transfers", Icons.Filled.AccountBalance, "Own bank accounts", navController) {
+                        selectedSheetType = BottomSheetContentType.Transfers
+                        showSheet = true
+                    }
+                    MoneyOptionCard("Interac e-Transfer®", Icons.Filled.Send, "Send or request money", navController) {
+                        selectedSheetType = BottomSheetContentType.InteracETransfer
+                        showSheet = true
+                    }
+                    MoneyOptionCard("Payments", Icons.Filled.Payment, "Transfer funds between Canadian banks", navController) {
+                        selectedSheetType = BottomSheetContentType.Payments
+                        showSheet = true
+                    }
+                    MoneyOptionCard("Scheduled Transfers", Icons.Filled.Schedule, "Send money to your client", navController) {
+                        selectedSheetType = BottomSheetContentType.ScheduledTransfers
+                        showSheet = true
+                    }
                 }
             }
         }
     }
 
-    //   Bottom Sheet
-    if (showSheet) {
+    if (showSheet && selectedSheetType != null) {
         ModalBottomSheet(
             onDismissRequest = { showSheet = false },
             sheetState = sheetState,
             containerColor = Color.White,
-            modifier = Modifier.padding(horizontal = 20.dp),
             shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
         ) {
-            TransferOptionsContent()
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding() // ✅ 100% inside the column, not outside!
+                    .padding(horizontal = 20.dp)
+                    .padding(bottom = 20.dp) // extra space if you want
+            ) {
+                // Drag Handle (Optional UI improvement)
+//                Box(
+//                    modifier = Modifier
+//                        .padding(top = 8.dp, bottom = 16.dp)
+//                        .width(40.dp)
+//                        .height(4.dp)
+//                        .background(Color.Gray, shape = RoundedCornerShape(50))
+//                        .align(Alignment.CenterHorizontally)
+//                )
+
+                // Bottom Sheet content depending on selected option
+                when (selectedSheetType) {
+                    is BottomSheetContentType.Transfers -> TransfersSheetContent()
+                    is BottomSheetContentType.InteracETransfer -> InteracETransferSheetContent(navController)
+                    is BottomSheetContentType.Payments -> PaymentsSheetContent()
+                    is BottomSheetContentType.ScheduledTransfers -> ScheduledTransfersSheetContent()
+                    else -> {}
+                }
+            }
         }
+    }
+
+}
+@Composable
+fun TransfersSheetContent() {
+//    Column(modifier = Modifier.padding(16.dp)) {
+//        Text("Transfers", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+//        Spacer(modifier = Modifier.height(8.dp))
+//        Text("Transfer between your own accounts instantly or schedule them for later.")
+//    }
+
+    val context = LocalContext.current // Get the context for creating the Intent
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Text(
+            text = "Transfers",
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        val options = listOf(
+            "Transfer Money" to Icons.Default.CompareArrows,
+            "Add Contact" to Icons.Filled.AccountBalance,
+            "Manage Accounts" to Icons.Default.ManageAccounts
+        )
+
+        options.forEach { (label, icon) ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        if (label == "Transfer Money") {
+                            val intent = Intent(context, MainActivity::class.java)
+                            intent.putExtra("navigate_to_transfer_money", true)
+                            context.startActivity(intent)
+                        }
+                    }
+                    .padding(vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = label,
+                    tint = Color(0xFF525252),
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(
+                    text = label,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+        }
+    }
+}
+//@Composable
+//fun InteracETransferSheetContent() {
+//    Column(modifier = Modifier.padding(16.dp)) {
+//        Text("Interac e-Transfer®", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+//        Spacer(modifier = Modifier.height(8.dp))
+//        Text("Send or request money quickly via email or phone number.")
+//    }
+//}
+@Composable
+fun PaymentsSheetContent() {
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text("Payments", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+        Spacer(modifier = Modifier.height(8.dp))
+        Text("Make payments between Canadian banks easily and securely.")
+    }
+}
+@Composable
+fun ScheduledTransfersSheetContent() {
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text("Scheduled Transfers", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+        Spacer(modifier = Modifier.height(8.dp))
+        Text("Plan and manage your recurring money transfers conveniently.")
     }
 }
 
@@ -550,17 +285,24 @@ fun MoneyOptionCard(title: String, icon: ImageVector, description: String, navCo
 //            Icon(
 //                imageVector = Icons.Filled.ArrowForward,
 //                contentDescription = "Arrow",
-//                tint = Color.White,
+//                tint = Color.Black,
 //                modifier = Modifier.size(24.dp)
 //            )
         }
     }
 }
 
+sealed class BottomSheetContentType {
+    object Transfers : BottomSheetContentType()
+    object InteracETransfer : BottomSheetContentType()
+    object Payments : BottomSheetContentType()
+    object ScheduledTransfers : BottomSheetContentType()
+}
+
 
 //   Bottom Sheet Content
 @Composable
-fun TransferOptionsContent() {
+fun InteracETransferSheetContent(navController:NavHostController) {
     val context = LocalContext.current // Get the context for creating the Intent
     Column(
         modifier = Modifier
@@ -575,13 +317,13 @@ fun TransferOptionsContent() {
         )
 
         val options = listOf(
-            "Send money" to Icons.Default.Add,
-            "Request money" to Icons.Default.Add,
-            "Manage contacts" to Icons.Default.Add,
-            "Pending" to Icons.Default.Add,
-            "History" to Icons.Default.Add,
-            "Autodeposit settings" to Icons.Default.Add,
-            "Profile settings" to Icons.Default.Add
+            "Send money" to Icons.Default.Send,
+            "Request money" to Icons.Default.RequestPage,
+            "Manage contacts" to Icons.Default.PersonAddAlt1,
+            "Pending" to Icons.Default.PendingActions,
+            "History" to Icons.Default.History,
+            "Autodeposit settings" to Icons.Default.AutoMode,
+            "Profile settings" to Icons.Default.ManageAccounts
         )
 
         options.forEach { (label, icon) ->
@@ -590,10 +332,11 @@ fun TransferOptionsContent() {
                     .fillMaxWidth()
                     .clickable {
                         if (label == "Send money") {
-                            // Use Intent to navigate to SendMoneyActivity
-                            val intent = Intent(context, SendMoneyActivity::class.java)
-                            context.startActivity(intent)  // Start SendMoneyActivity
+                            val intent = Intent(context, MainActivity::class.java)
+                            intent.putExtra("navigate_to_send_money", true)
+                            context.startActivity(intent)
                         }
+
                     }
                     .padding(vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically

@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.accbankandroid.CommonComponents.TopBarLogo
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,189 +66,215 @@ fun RegistrationScreen(navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
             .background(getGradientBrush()) // Apply new gradient
-            .padding(16.dp),
-        contentAlignment = Alignment.Center
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .verticalScroll(scrollState)
-                .padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "Registration",
-                fontSize = 26.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                fontFamily = FontFamily.SansSerif,
+        Column(modifier = Modifier.fillMaxSize()) {
+            TopBarLogo()
+
+
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 20.dp)
-                    .wrapContentWidth(Alignment.CenterHorizontally)
-            )
-
-            Spacer(modifier = Modifier.height(30.dp))
-
-            // User ID/username TextField
-            OutlinedTextField(
-                value = username,
-                onValueChange = { username = it },
-                label = { Text("User ID/username") },
-                singleLine = true,
-                shape = RoundedCornerShape(24.dp),
-                modifier = Modifier.fillMaxWidth(),
-                trailingIcon = {
-                    IconButton(onClick = { /* Action to remember username */ }) {
-                        Icon(painter = painterResource(id = android.R.drawable.ic_dialog_info), contentDescription = "Info", tint = Color.White)
-                    }
-                },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
-                    unfocusedLabelColor = Color.White,
-                    focusedLabelColor = Color.White,
-                    focusedBorderColor = Color.White.copy(alpha = 0.9f),
-                    unfocusedBorderColor = Color.White.copy(alpha = 0.5f),
-                    containerColor = Color.White.copy(alpha = 0.1f)
-                )
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Password TextField
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Password") },
-                singleLine = true,
-                shape = RoundedCornerShape(24.dp),
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth(),
-                trailingIcon = {
-                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Icon(painter = painterResource(id = android.R.drawable.ic_menu_view), contentDescription = "Toggle Password Visibility", tint = Color.White)
-                    }
-                },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
-                    unfocusedLabelColor = Color.White,
-                    focusedLabelColor = Color.White,
-                    focusedBorderColor = Color.White.copy(alpha = 0.9f),
-                    unfocusedBorderColor = Color.White.copy(alpha = 0.5f),
-                    containerColor = Color.White.copy(alpha = 0.1f)
-                )
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Confirm Password TextField
-            OutlinedTextField(
-                value = confirmPassword,
-                onValueChange = { confirmPassword = it },
-                label = { Text("Confirm Password") },
-                singleLine = true,
-                shape = RoundedCornerShape(24.dp),
-                visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth(),
-                trailingIcon = {
-                    IconButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) {
-                        Icon(painter = painterResource(id = android.R.drawable.ic_menu_view), contentDescription = "Toggle Password Visibility", tint = Color.White)
-                    }
-                },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
-                    unfocusedLabelColor = Color.White,
-                    focusedLabelColor = Color.White,
-                    focusedBorderColor = Color.White.copy(alpha = 0.9f),
-                    unfocusedBorderColor = Color.White.copy(alpha = 0.5f),
-                    containerColor = Color.White.copy(alpha = 0.1f)
-                )
-            )
-            Spacer(modifier = Modifier.height(25.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                    .fillMaxSize()
+                    .weight(1f),
+                contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "Already have an account?",
-                    fontSize = 14.sp,
-                    color = Color.White.copy(alpha = 0.8f)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Login!",
-                    fontSize = 14.sp,
-                    color = Color.White.copy(alpha = 0.8f),
-                    modifier = Modifier.clickable {
-                        // Navigate to the Registration screen
-                        navController.navigate(NavigationRoutes.Login   .route)
-                    }
-                )
-            }
-
-            // Error Message Display
-            if (errorMessage.isNotEmpty()) {
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(scrollState)
+                        .padding(20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
+
                 ) {
                     Text(
-                        text = errorMessage,
-                        color = Color.Red,
-                        fontSize = 16.sp,
+                        text = "Registration",
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
                         fontFamily = FontFamily.SansSerif,
-                        textAlign = TextAlign.Center,
                         modifier = Modifier
-                            .padding(top = 4.dp)
                             .fillMaxWidth()
+                            .padding(top = 20.dp)
+                            .wrapContentWidth(Alignment.CenterHorizontally)
                     )
-                }
-            }
 
-            Spacer(modifier = Modifier.height(40.dp))
+                    Spacer(modifier = Modifier.height(30.dp))
 
-            // Register Button
-            Button(
-                onClick = {
-                    if (username.isEmpty()) {
-                        errorMessage = "Email cannot be empty"
-                    } else if (password.isEmpty() || confirmPassword.isEmpty()) {
-                        errorMessage = "Password cannot be empty"
-                    } else if (password != confirmPassword) {
-                        errorMessage = "Password and Confirm password do not match"
-                    } else if (!isValidPassword(password)) {
-                        errorMessage = "Password must be at least 10 characters, with 1 letter, 1 special character, 1 number, 1 uppercase, and 1 lowercase"
-                    } else {
-                        errorMessage = "" // Clear error when valid
-                        isRegistering = true
+                    // User ID/username TextField
+                    OutlinedTextField(
+                        value = username,
+                        onValueChange = { username = it },
+                        label = { Text("User ID/username") },
+                        singleLine = true,
+                        shape = RoundedCornerShape(24.dp),
+                        modifier = Modifier.fillMaxWidth(),
+                        trailingIcon = {
+                            IconButton(onClick = { /* Action to remember username */ }) {
+                                Icon(
+                                    painter = painterResource(id = android.R.drawable.ic_dialog_info),
+                                    contentDescription = "Info",
+                                    tint = Color.White
+                                )
+                            }
+                        },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedTextColor = Color.White,
+                            unfocusedTextColor = Color.White,
+                            unfocusedLabelColor = Color.White,
+                            focusedLabelColor = Color.White,
+                            focusedBorderColor = Color.White.copy(alpha = 0.9f),
+                            unfocusedBorderColor = Color.White.copy(alpha = 0.5f),
+                            containerColor = Color.White.copy(alpha = 0.1f)
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Password TextField
+                    OutlinedTextField(
+                        value = password,
+                        onValueChange = { password = it },
+                        label = { Text("Password") },
+                        singleLine = true,
+                        shape = RoundedCornerShape(24.dp),
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        modifier = Modifier.fillMaxWidth(),
+                        trailingIcon = {
+                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                Icon(
+                                    painter = painterResource(id = android.R.drawable.ic_menu_view),
+                                    contentDescription = "Toggle Password Visibility",
+                                    tint = Color.White
+                                )
+                            }
+                        },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedTextColor = Color.White,
+                            unfocusedTextColor = Color.White,
+                            unfocusedLabelColor = Color.White,
+                            focusedLabelColor = Color.White,
+                            focusedBorderColor = Color.White.copy(alpha = 0.9f),
+                            unfocusedBorderColor = Color.White.copy(alpha = 0.5f),
+                            containerColor = Color.White.copy(alpha = 0.1f)
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Confirm Password TextField
+                    OutlinedTextField(
+                        value = confirmPassword,
+                        onValueChange = { confirmPassword = it },
+                        label = { Text("Confirm Password") },
+                        singleLine = true,
+                        shape = RoundedCornerShape(24.dp),
+                        visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        modifier = Modifier.fillMaxWidth(),
+                        trailingIcon = {
+                            IconButton(onClick = {
+                                confirmPasswordVisible = !confirmPasswordVisible
+                            }) {
+                                Icon(
+                                    painter = painterResource(id = android.R.drawable.ic_menu_view),
+                                    contentDescription = "Toggle Password Visibility",
+                                    tint = Color.White
+                                )
+                            }
+                        },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedTextColor = Color.White,
+                            unfocusedTextColor = Color.White,
+                            unfocusedLabelColor = Color.White,
+                            focusedLabelColor = Color.White,
+                            focusedBorderColor = Color.White.copy(alpha = 0.9f),
+                            unfocusedBorderColor = Color.White.copy(alpha = 0.5f),
+                            containerColor = Color.White.copy(alpha = 0.1f)
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(25.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Already have an account?",
+                            fontSize = 14.sp,
+                            color = Color.White.copy(alpha = 0.8f)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "Login!",
+                            fontSize = 14.sp,
+                            color = Color.White.copy(alpha = 0.8f),
+                            modifier = Modifier.clickable {
+                                // Navigate to the Registration screen
+                                navController.navigate(NavigationRoutes.Login.route)
+                            }
+                        )
                     }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                shape = RoundedCornerShape(50.dp),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White)
-            ) {
-                Text(text = "Register", fontSize = 18.sp, color = Color.Black)
-            }
 
-            Spacer(modifier = Modifier.height(100.dp))
+                    // Error Message Display
+                    if (errorMessage.isNotEmpty()) {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = errorMessage,
+                                color = Color.Red,
+                                fontSize = 16.sp,
+                                fontFamily = FontFamily.SansSerif,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .padding(top = 4.dp)
+                                    .fillMaxWidth()
+                            )
+                        }
+                    }
 
-            // Show loading spinner when registering
-            if (isRegistering) {
-                CircularProgressIndicator(color = Color.White)
-            }
+                    Spacer(modifier = Modifier.height(40.dp))
 
-            // Handle navigation after registration
-            LaunchedEffect(isRegistering) {
-                if (isRegistering) {
-                    delay(2000) // Simulate delay for loading spinner
-                    isRegistering = false
-                    navController.navigate(NavigationRoutes.PhoneNumberInputScreen.route)
+                    // Register Button
+                    Button(
+                        onClick = {
+                            if (username.isEmpty()) {
+                                errorMessage = "Email cannot be empty"
+                            } else if (password.isEmpty() || confirmPassword.isEmpty()) {
+                                errorMessage = "Password cannot be empty"
+                            } else if (password != confirmPassword) {
+                                errorMessage = "Password and Confirm password do not match"
+                            } else if (!isValidPassword(password)) {
+                                errorMessage =
+                                    "Password must be at least 10 characters, with 1 letter, 1 special character, 1 number, 1 uppercase, and 1 lowercase"
+                            } else {
+                                errorMessage = "" // Clear error when valid
+                                isRegistering = true
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp),
+                        shape = RoundedCornerShape(50.dp),
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+                    ) {
+                        Text(text = "Register", fontSize = 18.sp, color = Color.Black)
+                    }
+
+                    Spacer(modifier = Modifier.height(100.dp))
+
+                    // Show loading spinner when registering
+                    if (isRegistering) {
+                        CircularProgressIndicator(color = Color.White)
+                    }
+
+                    // Handle navigation after registration
+                    LaunchedEffect(isRegistering) {
+                        if (isRegistering) {
+                            delay(2000) // Simulate delay for loading spinner
+                            isRegistering = false
+                            navController.navigate(NavigationRoutes.PhoneNumberInputScreen.route)
+                        }
+                    }
                 }
             }
         }

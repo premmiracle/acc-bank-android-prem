@@ -3,6 +3,7 @@ package com.example.accbankandroid
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -15,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.navigation.compose.rememberNavController
 import com.example.accbankandroid.ui.theme.getGradientBrush
 import kotlinx.coroutines.delay
@@ -22,7 +24,8 @@ import kotlinx.coroutines.delay
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmailOTPValidationScreen(navController: NavController) {
-    var otpValues by remember { mutableStateOf(Array(6) { "" }) }
+//    var otpValues by remember { mutableStateOf(Array(6) { "" }) }
+    val otpValues = remember { mutableStateListOf("", "", "", "", "", "") }
     var errorMessage by remember { mutableStateOf("") }
     var isValidOTP by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) } // Loading state
@@ -64,20 +67,35 @@ fun EmailOTPValidationScreen(navController: NavController) {
                 for (i in otpValues.indices) {
                     OutlinedTextField(
                         value = otpValues[i],
+//                        onValueChange = { newValue ->
+//                            if (newValue.length <= 1) {
+//                                otpValues[i] = newValue
+//                                // Move focus to the next field if the OTP digit is entered
+//                                if (newValue.isNotEmpty() && i < otpValues.size - 1) {
+//                                    focusManager.moveFocus(FocusDirection.Next)
+//                                }
+//                            }
+//                        },
                         onValueChange = { newValue ->
-                            if (newValue.length <= 1) {
-                                otpValues[i] = newValue
-                                // Move focus to the next field if the OTP digit is entered
-                                if (newValue.isNotEmpty() && i < otpValues.size - 1) {
-                                    focusManager.moveFocus(FocusDirection.Next)
+                            if (newValue.length <= 1 && newValue.all { it.isDigit() }) {
+                                if (newValue.isEmpty() && otpValues[i].isNotEmpty()) {
+                                    otpValues[i] = ""
+                                    if (i > 0) focusManager.moveFocus(FocusDirection.Previous)
+                                } else {
+                                    otpValues[i] = newValue
+                                    if (i < otpValues.size - 1) {
+                                        focusManager.moveFocus(FocusDirection.Next)
+                                    }
+
                                 }
                             }
                         },
-                        label = { Text("") },
+                                label = { Text("") },
                         modifier = Modifier
                             .weight(1f) // Makes each box flexible and fit in the screen
                             .height(70.dp) // Increase height for better visibility
                             .padding(3.dp), // Add padding for better layout
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Phone), // Set numeric keyboard
                         singleLine = true,
                         shape = RoundedCornerShape(16.dp),
                         colors = TextFieldDefaults.outlinedTextFieldColors(

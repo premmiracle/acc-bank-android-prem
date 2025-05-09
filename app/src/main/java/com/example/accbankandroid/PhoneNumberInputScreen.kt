@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.accbankandroid.CommonComponents.BottomNavigation
+import com.example.accbankandroid.CommonComponents.TopBarLogo
 import com.example.accbankandroid.ui.theme.getGradientBrush
 import kotlinx.coroutines.delay
 
@@ -56,141 +57,175 @@ fun PhoneNumberInputScreen(navController: NavController) {
     var Isvarified by remember { mutableStateOf(false) }
     // ✅ Remember scroll state for vertical scrolling
     //val scrollState = rememberScrollState()
+
+
+    fun formatPhoneNumber(input: String): String {
+        val digits = input.filter { it.isDigit() }.take(10)
+
+        return when (digits.length) {
+            in 1..3 -> "(${digits}"
+            in 4..6 -> "(${digits.substring(0, 3)}) ${digits.substring(3)}"
+            in 7..10 -> "(${digits.substring(0, 3)}) ${digits.substring(3, 6)}-${digits.substring(6)}"
+            else -> digits
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(getGradientBrush()) // Apply new gradient
-            .padding(16.dp),
-        contentAlignment = Alignment.Center
-
     ) {
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                //.verticalScroll(rememberScrollState())
-                .padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "Enter PhoneNumber",
-                fontSize = 26.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                fontFamily = FontFamily.SansSerif,
+        Column(modifier = Modifier.fillMaxSize()) {
+            TopBarLogo()
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 20.dp)
-                    .wrapContentWidth(Alignment.CenterHorizontally)
-            )
-            Spacer(modifier = Modifier.padding(16.dp))
-            // Phone number and country code input
-            OutlinedTextField(
-                value = phoneNumber,
-                onValueChange = { phoneNumber = it },
-                label = { Text("Phone Number") },
-                singleLine = true,
-                shape = RoundedCornerShape(24.dp),
-                modifier = Modifier
-                    .fillMaxWidth(),
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Phone), // Set numeric keyboard
-                trailingIcon = {
-                    IconButton(onClick = { /* Action to remember username */ }) {
-                        Icon(painter = painterResource(id = android.R.drawable.ic_menu_call), contentDescription = "Info", tint = Color.White)
-                    }
-                },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
-                    unfocusedLabelColor = Color.White,
-                    focusedLabelColor = Color.White,
-                    focusedBorderColor = Color.White.copy(alpha = 0.9f),
-                    unfocusedBorderColor = Color.White.copy(alpha = 0.5f),
-                    containerColor = Color.White.copy(alpha = 0.1f)
-                )
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Send OTP Button
-            Button(
-                onClick = {
-                    if (phoneNumber.isEmpty()) {
-                        errorMessage = "Phone number cannot be empty"
-                    } else {
-                        // Logic to send OTP
-                        otpSent = true
-                        errorMessage = ""
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                shape = RoundedCornerShape(50.dp), // Fully rounded
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+                    .fillMaxSize()
+                    .weight(1f),
+                contentAlignment = Alignment.Center
             ) {
-                Text(text = if (otpSent) "Resend OTP" else "Send OTP",
-                    fontSize = 18.sp,
-                    color = Color.Black
-                )
-            }
 
-            if (otpSent) {
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // OTP Input Field
-                OutlinedTextField(
-                    value = otp,
-                    onValueChange = { otp = it },
-                    label = { Text("Enter OTP") },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Button(
-                    onClick = {
-                        if (otp == "123456") {  // Assuming OTP validation logic here
-                            errorMessage = ""
-                           Isvarified=true
-                        } else {
-                            errorMessage = "Invalid OTP"
-                        }
-                    },
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(50.dp),
-                    shape = RoundedCornerShape(50.dp), // Fully rounded
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+                        //.verticalScroll(rememberScrollState())
+                        .padding(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "Verify OTP", fontSize = 18.sp, color = Color.Black)
-                }
+                    Text(
+                        text = "Enter PhoneNumber",
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                        fontFamily = FontFamily.SansSerif,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 20.dp)
+                            .wrapContentWidth(Alignment.CenterHorizontally)
+                    )
+                    Spacer(modifier = Modifier.padding(16.dp))
+                    // Phone number and country code input
+                    OutlinedTextField(
+                        value = phoneNumber,
+                        onValueChange = {
+                            phoneNumber = formatPhoneNumber(it)
+                        },
+                        label = { Text("Phone Number") },
+                        singleLine = true,
+                        shape = RoundedCornerShape(24.dp),
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.fillMaxWidth(),
+                        trailingIcon = {
+                            IconButton(onClick = {}) {
+                                Icon(
+                                    painter = painterResource(id = android.R.drawable.ic_menu_call),
+                                    contentDescription = "Info",
+                                    tint = Color.White
+                                )
+                            }
+                        },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedTextColor = Color.White,
+                            unfocusedTextColor = Color.White,
+                            unfocusedLabelColor = Color.White,
+                            focusedLabelColor = Color.White,
+                            focusedBorderColor = Color.White.copy(alpha = 0.9f),
+                            unfocusedBorderColor = Color.White.copy(alpha = 0.5f),
+                            containerColor = Color.White.copy(alpha = 0.1f)
+                        )
+                    )
 
 
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                if (Isvarified) {
-                    CircularProgressIndicator(color = Color.White)
-                }
-
-                // Handle navigation after registration
-                LaunchedEffect(Isvarified) {
-                    if (Isvarified) {
-                        delay(2000) // Simulate delay for loading spinner
-                        Isvarified = false
-                        navController.navigate(NavigationRoutes.EmailOTPValidationScreen.route)
+                    // Send OTP Button
+                    Button(
+                        onClick = {
+                            if (phoneNumber.isEmpty()) {
+                                errorMessage = "Phone number cannot be empty"
+                            } else {
+                                // Logic to send OTP
+                                otpSent = true
+                                errorMessage = ""
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp),
+                        shape = RoundedCornerShape(50.dp), // Fully rounded
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+                    ) {
+                        Text(
+                            text = if (otpSent) "Resend OTP" else "Send OTP",
+                            fontSize = 18.sp,
+                            color = Color.Black
+                        )
                     }
-                }
+
+                    if (otpSent) {
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // OTP Input Field
+                        OutlinedTextField(
+                            value = otp,
+                            onValueChange = { otp = it },
+                            label = { Text("Enter OTP") },
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Button(
+                            onClick = {
+                                if (otp == "123456") {  // Assuming OTP validation logic here
+                                    errorMessage = ""
+                                    Isvarified = true
+                                } else {
+                                    errorMessage = "Invalid OTP"
+                                }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(50.dp),
+                            shape = RoundedCornerShape(50.dp), // Fully rounded
+                            elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+                        ) {
+                            Text(text = "Verify OTP", fontSize = 18.sp, color = Color.Black)
+                        }
+
+
+
+                        if (Isvarified) {
+                            CircularProgressIndicator(color = Color.White)
+                        }
+
+                        // Handle navigation after registration
+                        LaunchedEffect(Isvarified) {
+                            if (Isvarified) {
+                                delay(2000) // Simulate delay for loading spinner
+                                Isvarified = false
+                                navController.navigate(NavigationRoutes.EmailOTPValidationScreen.route)
+                            }
+                        }
 //                if(Isvarified){
 //                    navController.navigate(NavigationRoutes.EmailOTPValidationScreen.route)
 //                }
-                if (errorMessage.isNotEmpty()) {
-                    Text(text = errorMessage, color = Color.Red, fontSize = 16.sp)
+                        if (errorMessage.isNotEmpty()) {
+                            Text(text = errorMessage, color = Color.Red, fontSize = 16.sp)
+                        }
+                    }
                 }
             }
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun PhoneNumberInputScreen() {
+    val navController = rememberNavController()
+    PhoneNumberInputScreen(navController)
+}
+
 

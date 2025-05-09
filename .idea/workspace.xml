@@ -9,12 +9,25 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34b79e30-14c2-4fec-800b-2d555fb9ab8b" name="Changes" comment="Added new activity in AndroidManifest.xml &#10;Added the bottom option in the send money and enhanced the design of SendMoney.kt&#10;Added navigation using intent to MoveMoney.kt to go to SendMoney.kt&#10;Added Navigations in the NavigationRoutes.kt&#10;Created the SendMoneyActivity.kt to call the SendMoney.kt inside it as the new activity">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/AddContact.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/AddContactActivity.kt" afterDir="false" />
+    <list default="true" id="34b79e30-14c2-4fec-800b-2d555fb9ab8b" name="Changes" comment="Added the Add contck screen &#10;called the add contact screen by the screen in the SendMoney.kt &#10;made the ui change in the SendMoney.kt screen">
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/CommonComponents/TopLogoBar.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/ConfirmContactScreen.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/ConformationSheets/TransferMyAccConfirmationSheet.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/ConformationSheets/TransferSuccessScreen.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/ConformationSheets/TransferToMemberConfirmationScreen.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/LoginOtpScreen.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/SendMoneyConfirmationSheet.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/TransferMoney.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/network/ApiService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/network/AuthApi.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/network/LoginRequest.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/network/LoginResponse.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/checksums/checksums.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/checksums/md5-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/checksums/sha1-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/dependencies-accessors/653825400482ee63928b2750563e94a5ec2d47e4/metadata.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/dependencies-accessors/653825400482ee63928b2750563e94a5ec2d47e4/sources/org/gradle/accessors/dm/LibrariesForLibs.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/dependencies-accessors/653825400482ee63928b2750563e94a5ec2d47e4/sources/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/fileHashes/fileHashes.bin" afterDir="false" />
@@ -23,18 +36,24 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/AccBankAndroid.app.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/CommonComponents/BottomNavigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/CommonComponents/BottomNavigation.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/AccountOverview.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/AccountOverview.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/AddContact.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/AddContact.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/AddContactActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/AddContactActivity.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/EmailOTPValidationScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/EmailOTPValidationScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/LoginScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/LoginScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/MainScreenWithBottomNav.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/MainScreenWithBottomNav.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/MoveMoney.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/MoveMoney.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/NavigationRoutes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/NavigationRoutes.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/PhoneNumberInputScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/PhoneNumberInputScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/Registration.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/Registration.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/SendMoney.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/SendMoney.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/SendMoneyActivity.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/ui/theme/Color.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/ui/theme/Color.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/ui/theme/Theme.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/accbankandroid/ui/theme/Theme.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/libs.versions.toml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +63,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=654dc706)]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\MCT\.android\avd\Medium_Phone.avd)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -91,8 +110,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Kotlin File" />
         <option value="Kotlin Class" />
+        <option value="Kotlin File" />
       </list>
     </option>
   </component>
@@ -152,6 +171,7 @@
       <recent name="C:\Users\MCT\AndroidStudioProjects\KotlinProjects\acc-bank-android-prem-2025\app\src\main\res\drawable" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\MCT\AndroidStudioProjects\KotlinProjects\acc-bank-android-prem-2025\app\src\main\java\com\example\accbankandroid\network" />
       <recent name="C:\Users\MCT\AndroidStudioProjects\KotlinProjects\acc-bank-android-prem-2025\app\src\main\java\com\example\accbankandroid" />
       <recent name="C:\Users\MCT\AndroidStudioProjects\KotlinProjects\acc-bank-android-prem-2025\app\src\main\java\com\example\accbankandroid\MoveMoneyOptions\Interac_E_Transfer" />
     </key>
@@ -414,7 +434,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741102564360</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Added the Add contck screen &#10;called the add contact screen by the screen in the SendMoney.kt &#10;made the ui change in the SendMoney.kt screen">
+      <option name="closed" value="true" />
+      <created>1744646209750</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1744646209750</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -451,19 +479,20 @@
     <MESSAGE value="Created the common page where there is the Component and bottom navigation is there and other screens are called in the component box.&#10;Created the bottom option tab for the &quot;Interac e-Transfer&quot; option in move money tab." />
     <MESSAGE value="Added the SendMoney.kt file and &#10;added the change biometric in LoginScreen.kt&#10;Added the change in MoveMoney.kt&#10;Added new navigations in the NavigationRoutes.kt" />
     <MESSAGE value="Added new activity in AndroidManifest.xml &#10;Added the bottom option in the send money and enhanced the design of SendMoney.kt&#10;Added navigation using intent to MoveMoney.kt to go to SendMoney.kt&#10;Added Navigations in the NavigationRoutes.kt&#10;Created the SendMoneyActivity.kt to call the SendMoney.kt inside it as the new activity" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added new activity in AndroidManifest.xml &#10;Added the bottom option in the send money and enhanced the design of SendMoney.kt&#10;Added navigation using intent to MoveMoney.kt to go to SendMoney.kt&#10;Added Navigations in the NavigationRoutes.kt&#10;Created the SendMoneyActivity.kt to call the SendMoney.kt inside it as the new activity" />
+    <MESSAGE value="Added the Add contck screen &#10;called the add contact screen by the screen in the SendMoney.kt &#10;made the ui change in the SendMoney.kt screen" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added the Add contck screen &#10;called the add contact screen by the screen in the SendMoney.kt &#10;made the ui change in the SendMoney.kt screen" />
   </component>
   <component name="play_dynamic_filters_status">
     <option name="appIdToCheckInfo">
       <map>
         <entry key="com.example.accbankandroid">
           <value>
-            <CheckInfo lastCheckTimestamp="1744644440349" />
+            <CheckInfo lastCheckTimestamp="1746777144874" />
           </value>
         </entry>
         <entry key="com.example.accbankandroid.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1744644440350" />
+            <CheckInfo lastCheckTimestamp="1746777144851" />
           </value>
         </entry>
         <entry key="com.example.newtempactivity">

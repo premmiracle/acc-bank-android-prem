@@ -1,12 +1,15 @@
 package com.example.accbankandroid
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -23,19 +26,27 @@ import java.io.File
 import java.lang.reflect.Type
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import com.example.accbankandroid.ui.theme.getGradientBrush
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
+import java.util.UUID
 
 data class TransferContact(
+    val id: String = UUID.randomUUID().toString(),// 🆔 unique per contact
     val name: String,
     val nickname: String,
     val phoneNumber: String,
     val email: String,
+    val countryCode: String,
+    val mobilePhone: String,
     val sendByEmail: Boolean,
     val sendByPhone: Boolean,
-    val countryCode: String, // Add the missing countryCode field
-    val mobilePhone: String
+    val securityQuestion: String? = null,
+    val securityAnswer: String? = null,
+    val confirmSecurityAnswer: String? = null
 )
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -79,21 +90,50 @@ fun AddContactScreen(context: Context) {
 
         Toast.makeText(context, "Contact Saved", Toast.LENGTH_SHORT).show()
     }
-
+    val systemUiController = rememberSystemUiController()
+    // Set white system bar colors
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = Color.White, // match your top bar or screen background
+            darkIcons = true     // use dark icons for light background
+        )
+    }
     Column(
         modifier = Modifier
             .fillMaxSize() // Ensure the column fills the whole screen
             .padding(16.dp), // Background color for the screen
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = {
+                if (context is Activity) {
+                    context.finish() // Close the current activity and return to the previous one
+                }
+            }) {
+                Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+            }
+
+            Text(
+                text = "Add Recipient",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                modifier = Modifier.weight(1f), // This makes the text take the remaining space and align it to the center
+                textAlign = TextAlign.Center
+            )
+        }
         // Title
-        Text(
-            text = "Add Recipient",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
+//        Text(
+//            text = "Add Recipient",
+//            fontSize = 24.sp,
+//            fontWeight = FontWeight.Bold,
+//            color = Color.Black,
+//            modifier = Modifier.padding(bottom = 16.dp)
+//        )
         Spacer(modifier = Modifier.height(20.dp))
         // Name field
         OutlinedTextField(
@@ -101,7 +141,14 @@ fun AddContactScreen(context: Context) {
             onValueChange = { name = it },
             label = { Text("Name") },
             shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+            modifier =
+                Modifier.fillMaxWidth()
+                .padding(vertical = 4.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color(0xFF1E90FF),      // Active border color
+                focusedLabelColor = Color(0xFF1E90FF),       // Active label color
+                cursorColor = Color(0xFF1E90FF)              // Cursor color (optional)
+            )
         )
         Spacer(modifier = Modifier.height(20.dp))
         // Nickname field (optional)
@@ -110,16 +157,28 @@ fun AddContactScreen(context: Context) {
             onValueChange = { nickname = it },
             label = { Text("Nick name (Optional)") },
             shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+            modifier = Modifier.fillMaxWidth()
+                .padding(vertical = 4.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color(0xFF1E90FF),      // Active border color
+                focusedLabelColor = Color(0xFF1E90FF),       // Active label color
+                cursorColor = Color(0xFF1E90FF)              // Cursor color (optional)
+            )
         )
         Spacer(modifier = Modifier.height(20.dp))
         // Phone number field
         OutlinedTextField(
             value = phoneNumber,
             onValueChange = { phoneNumber = it },
-            label = { Text("Phone Number") },
+            label = { Text("Account Number") },
             shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+            modifier = Modifier.fillMaxWidth()
+                .padding(vertical = 4.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color(0xFF1E90FF),      // Active border color
+                focusedLabelColor = Color(0xFF1E90FF),       // Active label color
+                cursorColor = Color(0xFF1E90FF)              // Cursor color (optional)
+            )
         )
         Spacer(modifier = Modifier.height(20.dp))
         // Email field
@@ -128,7 +187,13 @@ fun AddContactScreen(context: Context) {
             onValueChange = { email = it },
             label = { Text("Email") },
             shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+            modifier = Modifier.fillMaxWidth()
+                .padding(vertical = 4.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color(0xFF1E90FF),      // Active border color
+                focusedLabelColor = Color(0xFF1E90FF),       // Active label color
+                cursorColor = Color(0xFF1E90FF)              // Cursor color (optional)
+            )
         )
         Spacer(modifier = Modifier.height(20.dp))
         // Country Code and Mobile Phone number
@@ -146,6 +211,11 @@ fun AddContactScreen(context: Context) {
                 modifier = Modifier
                     .weight(1f)
                     .padding(end = 8.dp),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color(0xFF1E90FF),      // Active border color
+                    focusedLabelColor = Color(0xFF1E90FF),       // Active label color
+                    cursorColor = Color(0xFF1E90FF)              // Cursor color (optional)
+                ),
                 trailingIcon = {
                     // Button to increment the country code
                     IconButton(onClick = {
@@ -166,7 +236,12 @@ fun AddContactScreen(context: Context) {
                 onValueChange = { mobilePhone = it },
                 label = { Text("Mobile Phone Number") },
                 shape = RoundedCornerShape(16.dp),
-                modifier = Modifier.weight(2f)
+                modifier = Modifier.weight(2f),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color(0xFF1E90FF),      // Active border color
+                    focusedLabelColor = Color(0xFF1E90FF),       // Active label color
+                    cursorColor = Color(0xFF1E90FF)              // Cursor color (optional)
+                )
             )
         }
 
@@ -184,7 +259,13 @@ fun AddContactScreen(context: Context) {
             )
             Switch(
                 checked = sendByEmail,
-                onCheckedChange = { sendByEmail = it }
+                onCheckedChange = { sendByEmail = it },
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = Color.White,            // Thumb when ON
+                    checkedTrackColor = Color(0xFF1E90FF),      // Track when ON (active border color)
+                    uncheckedThumbColor = Color.LightGray,      // Thumb when OFF
+                    uncheckedTrackColor = Color.Gray            // Track when OFF
+                )
             )
         }
 
@@ -202,7 +283,13 @@ fun AddContactScreen(context: Context) {
             )
             Switch(
                 checked = sendByPhone,
-                onCheckedChange = { sendByPhone = it }
+                onCheckedChange = { sendByPhone = it },
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = Color.White,            // Thumb when ON
+                    checkedTrackColor = Color(0xFF1E90FF),      // Track when ON (active border color)
+                    uncheckedThumbColor = Color.LightGray,      // Thumb when OFF
+                    uncheckedTrackColor = Color.Gray            // Track when OFF
+                )
             )
         }
 
@@ -210,17 +297,19 @@ fun AddContactScreen(context: Context) {
         // Review TransferContact button
         Button(
             onClick = {
-                val newContact = TransferContact(
-                    name = name,
-                    nickname = nickname,
-                    phoneNumber = phoneNumber,
-                    email = email,
-                    countryCode = countryCode,
-                    mobilePhone = mobilePhone,
-                    sendByEmail = sendByEmail,
-                    sendByPhone = sendByPhone
-                )
-                saveContactData(newContact) // Save the TransferContact
+                val intent = Intent(context, MainActivity::class.java).apply {
+//                    putExtra("id", id)
+                    putExtra("navigate_contact_confirmation", true)
+                    putExtra("name", name)
+                    putExtra("nickname", nickname)
+                    putExtra("phoneNumber", phoneNumber)
+                    putExtra("email", email)
+                    putExtra("countryCode", countryCode)
+                    putExtra("mobilePhone", mobilePhone)
+                    putExtra("sendByEmail", sendByEmail)
+                    putExtra("sendByPhone", sendByPhone)
+                }
+                context.startActivity(intent)
             },
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier

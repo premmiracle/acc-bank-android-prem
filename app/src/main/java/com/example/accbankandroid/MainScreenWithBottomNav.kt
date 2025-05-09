@@ -27,12 +27,24 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.accbankandroid.CommonComponents.TopBarLogo
 import com.example.accbankandroid.ui.theme.getGradientBrush
+//import androidx.compose.ui.input.nestedscroll.NestedScrollSource.Companion.SideEffect
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import androidx.compose.runtime.SideEffect
 
 
 @Composable
 fun MainScreenWithBottomNav(navController: NavController) {
     val navController = rememberNavController()
+    val systemUiController = rememberSystemUiController()
+    // Set white system bar colors
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = Color.White, // match your top bar or screen background
+            darkIcons = true     // use dark icons for light background
+        )
+    }
 
     Column (
         modifier = Modifier
@@ -40,6 +52,7 @@ fun MainScreenWithBottomNav(navController: NavController) {
             .background(getGradientBrush()) // ✅ Same Background as AccountOverview
             .systemBarsPadding() // ✅ Prevents overlapping with system bars
     ) {
+        TopBarLogo()
         // ✅ Content Section (Dynamic based on navigation)
         Box(
             modifier = Modifier
@@ -52,11 +65,16 @@ fun MainScreenWithBottomNav(navController: NavController) {
                 startDestination = NavigationRoutes.AccountOverview.route
             ) {
                 composable(NavigationRoutes.Login.route) { LoginScreen(navController) }
+                composable("loginOtpScreen/{token}") { backStackEntry ->
+                    val token = backStackEntry.arguments?.getString("token") ?: ""
+                    LoginOtpScreen(token, navController)
+                }
                 composable(NavigationRoutes.AccountOverview.route) { AccountOverview(navController) }
                 composable(NavigationRoutes.EmailOTPValidationScreen.route) { EmailOTPValidationScreen(navController) }
                 composable(NavigationRoutes.PhoneNumberInputScreen.route) { PhoneNumberInputScreen(navController) }
                 composable(NavigationRoutes.Registration.route) { RegistrationScreen(navController) }
                 composable(NavigationRoutes.MoveMoney.route) { MoveMoney(navController) }
+
             }
         }
 

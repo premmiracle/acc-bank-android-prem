@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
     <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
-
+    <!-- ✅ ADD THIS LINE -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -25,10 +26,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<!--        Send Money -->
-        <activity android:name=".SendMoneyActivity" />
-<!--Add Contact-->
-        <activity android:name=".AddContactActivity" />
     </application>
 
 </manifest>

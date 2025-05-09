@@ -87,7 +87,7 @@ fun AccountOverview(navController: NavHostController) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxSize()
             ) {
-                Spacer(modifier = Modifier.height(40.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 // ✅ Profile Image
                 Image(
